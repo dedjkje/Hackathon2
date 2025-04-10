@@ -16,7 +16,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] Transform cameraTransform;
 
     private float gravityForce;
-    private Vector3 moveVector;
+    [HideInInspector] public Vector3 moveVector;
+    [HideInInspector] public bool isGrounded;
     private CharacterController characterController;
     private int rightFingerId;
     private float halfScreenWidth;
@@ -44,6 +45,7 @@ public class FirstPersonController : MonoBehaviour
     void Update()
     {
         GetTouchInput();
+        isGrounded = characterController.isGrounded;
     }
 
     private void GetTouchInput()
