@@ -17,15 +17,19 @@ public class FirstPersonController : MonoBehaviour
 
     private float gravityForce;
     [HideInInspector] public Vector3 moveVector;
+    public Vector3 moveDelta;
     [HideInInspector] public bool isGrounded;
     private CharacterController characterController;
     private int rightFingerId;
     private float halfScreenWidth;
     private Vector2 lookInput;
     private float cameraPitch;
+    private Vector3 previousPosition;
 
     void Start()
     {
+        moveDelta = transform.position;
+        previousPosition = transform.position;
         characterController = GetComponent<CharacterController>();
         rightFingerId = -1;
         halfScreenWidth = Screen.width / 2;
@@ -40,6 +44,9 @@ public class FirstPersonController : MonoBehaviour
         {
             LookAround();
         }
+
+        moveDelta = transform.position - previousPosition;
+        previousPosition = transform.position;
     }
 
     void Update()

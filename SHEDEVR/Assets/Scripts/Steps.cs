@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 public class Steps : MonoBehaviour
 {
     [Header("Звуки")]
-    [SerializeField] AudioClip defaultStep;
+    [SerializeField] AudioClip[] steps;
     [SerializeField] AudioClip landing;
 
     [Header("Игрок")]
@@ -15,8 +15,10 @@ public class Steps : MonoBehaviour
 
     private AudioSource source;
     private Vector2 currentSpeed;
+    private Vector2 currentDelta;
     private float timeFromLastStep;
     private bool playLanding = false;
+    private int nextStep = 0;
 
     void Start()
     {
@@ -26,17 +28,19 @@ public class Steps : MonoBehaviour
     private void FixedUpdate()
     {
         currentSpeed = new Vector2(player.moveVector.x, player.moveVector.z);
+        currentDelta = new Vector2(player.moveDelta.x, player.moveDelta.z);
     }
 
     void Update()
     {
-        timeFromLastStep += Time.deltaTime * currentSpeed.magnitude;
+        timeFromLastStep += Time.deltaTime * currentDelta.magnitude;
 
         if (timeFromLastStep > interval && player.isGrounded)
         {
-            source.resource = defaultStep;
+            source.resource = steps[nextStep];
             source.Play();
             timeFromLastStep = 0;
+            nextStep = (nextStep + 1) % 5;
         }
         if (currentSpeed.magnitude == 0 || !player.isGrounded)
         {

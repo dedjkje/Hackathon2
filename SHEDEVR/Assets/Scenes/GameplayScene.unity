@@ -1090,7 +1090,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 981edafec7abc41468ef3873a192c13a, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 981edafec7abc41468ef3873a192c13a, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.2
@@ -1189,10 +1189,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfbac26049ae35e4c97ff9e54984386d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultStep: {fileID: 8300000, guid: 981edafec7abc41468ef3873a192c13a, type: 3}
-  landing: {fileID: 8300000, guid: b724e2c90316d3c47aab02afb45387f7, type: 3}
+  steps:
+  - {fileID: 8300000, guid: 8b3a8074eb717454a921d408c45e4c11, type: 3}
+  - {fileID: 8300000, guid: 23eede19aaeec6947b35d323ae380cf8, type: 3}
+  - {fileID: 8300000, guid: e749b93083b4546488692aee0db7990d, type: 3}
+  - {fileID: 8300000, guid: 31ec00dbf102c3b4c94c491d24fdff61, type: 3}
+  - {fileID: 8300000, guid: 6dd61336cdcb3af4fb4b6a60b1dcd923, type: 3}
+  landing: {fileID: 8300000, guid: 398744a3cd60c3647a121af459d7a883, type: 3}
   player: {fileID: 746095333}
-  interval: 0.45
+  interval: 0.55
 --- !u!1 &1347833726
 GameObject:
   m_ObjectHideFlags: 0
