@@ -52,7 +52,7 @@ public class Abilities : MonoBehaviour
     {
         preChange = (int)(currentAbility - 1);
         if (preChange == -1) currentAbility = Ability.Katana;
-        else currentAbility = (Ability)(preChange);
+        else currentAbility = (Ability)preChange;
     }
     public void changeAbility()
     {
@@ -88,10 +88,14 @@ public class Abilities : MonoBehaviour
         foreach (GameObject i in defaultUI) i.SetActive(true);
     }
 
-    public void isChanging()
+    public void isChangingTrue()
     {
 
-        changing = !changing;
-        Debug.Log("Выбор");
+        changing = true;
+    }
+    public void isChangingFalse()
+    {
+
+        changing = false;
     }
 }
