@@ -405,7 +405,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.8333333
-    functionName: isChanging
+    functionName: isChangingTrue
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: 824e5576bde7c584b84374cb979f6471, type: 3}
     floatParameter: 0
