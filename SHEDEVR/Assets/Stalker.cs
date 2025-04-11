@@ -8,10 +8,12 @@ public class Stalker : MonoBehaviour
 
     [Header("Movement Settings")]
     public float moveSpeed = 3f;
-    public float rotationSpeed = 10f;
+    public float rotationSpeed = 12f;
     public float stoppingDistance = 0.5f;
     public float slowDownDistance = 2f;
     public float waitTime = 1f;
+    public float obstacleAvoidDistance = 1.5f;
+    public float obstacleAvoidForce = 2f;
 
     [Header("Player Interaction")]
     public float playerDetectionRadius = 3f;
@@ -30,8 +32,10 @@ public class Stalker : MonoBehaviour
     private bool isWaiting = false;
     private bool isFollowingPlayer = false;
     private bool isAttacking = false;
+    private bool shouldReturnToPath = false;
     private float lastAttackTime = 0f;
     private Vector3 lastWaypointPosition;
+    private Vector3 currentAvoidDirection;
 
     void Start()
     {
@@ -52,12 +56,9 @@ public class Stalker : MonoBehaviour
     {
         if (waypoints.Length == 0) return;
 
-        // Обновление состояний
         UpdateAttackState();
-        UpdatePlayerFollowing();
+        UpdateDecisionMaking();
         UpdateMovement();
-
-        // Обновление анимаций
         UpdateAnimations();
     }
 
@@ -78,34 +79,42 @@ public class Stalker : MonoBehaviour
     private IEnumerator PerformAttack()
     {
         isAttacking = true;
-        rb.linearVelocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
         animator.SetBool("isAttacking", true);
         lastAttackTime = Time.time;
 
-        // Нанесение урона
         if (playerController != null)
         {
             playerController.hp -= attackDamage;
-            Debug.Log($"Dog attacked! Player HP: {playerController.hp}");
         }
 
-        // Ждем завершения анимации атаки
         yield return new WaitForSeconds(1f);
         animator.SetBool("isAttacking", false);
         isAttacking = false;
     }
 
-    private void UpdatePlayerFollowing()
+    private void UpdateDecisionMaking()
     {
         if (isAttacking) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        float distanceFromWaypoint = Vector3.Distance(transform.position, lastWaypointPosition);
         bool playerInRange = distanceToPlayer <= playerDetectionRadius;
 
+        // Принятие решения о возврате на маршрут
+        if (shouldReturnToPath)
+        {
+            if (distanceFromWaypoint <= 0.5f)
+            {
+                shouldReturnToPath = false;
+                isFollowingPlayer = false;
+            }
+            return;
+        }
+
+        // Логика следования за игроком
         if (playerInRange && playerController != null)
         {
-            float distanceFromWaypoint = Vector3.Distance(transform.position, lastWaypointPosition);
-
             if (!isFollowingPlayer && distanceFromWaypoint <= maxDistanceFromWaypoint)
             {
                 StartFollowingPlayer();
@@ -114,23 +123,38 @@ public class Stalker : MonoBehaviour
                     (distanceToPlayer > stopFollowDistance ||
                      distanceFromWaypoint > maxDistanceFromWaypoint))
             {
-                StopFollowingPlayer();
+                InitiateReturnToPath();
             }
         }
     }
 
+    private void InitiateReturnToPath()
+    {
+        shouldReturnToPath = true;
+        isFollowingPlayer = false;
+        currentWaypointIndex = GetNearestWaypointIndex();
+        lastWaypointPosition = waypoints[currentWaypointIndex].position;
+    }
+
     private void UpdateMovement()
     {
-        if (isAttacking || isWaiting) return;
+        if (isAttacking || isWaiting)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
 
-        Vector3 targetPosition = isFollowingPlayer ? player.position : waypoints[currentWaypointIndex].position;
+        Vector3 targetPosition = shouldReturnToPath ?
+            lastWaypointPosition :
+            (isFollowingPlayer ? player.position : waypoints[currentWaypointIndex].position);
+
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
         if (distanceToTarget > stoppingDistance)
         {
             MoveToTarget(targetPosition, distanceToTarget);
         }
-        else if (!isFollowingPlayer)
+        else if (!isFollowingPlayer && !shouldReturnToPath)
         {
             StartCoroutine(WaitAtWaypoint());
         }
@@ -141,9 +165,14 @@ public class Stalker : MonoBehaviour
         Vector3 directionToTarget = (targetPosition - transform.position).normalized;
         directionToTarget.y = 0;
 
-        if (directionToTarget != Vector3.zero)
+        // Обход препятствий
+        Vector3 avoidForce = CalculateObstacleAvoidance();
+        Vector3 finalDirection = (directionToTarget + avoidForce).normalized;
+
+        // Поворот
+        if (finalDirection != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+            Quaternion targetRotation = Quaternion.LookRotation(finalDirection);
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRotation,
@@ -151,50 +180,53 @@ public class Stalker : MonoBehaviour
             );
         }
 
-        float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
-        bool isFacingTarget = angleToTarget < 30f;
+        // Движение
+        float speedMultiplier = currentDistance < slowDownDistance ?
+            Mathf.Clamp01(currentDistance / slowDownDistance) : 1f;
 
-        if (isFacingTarget)
+        rb.velocity = transform.forward * moveSpeed * speedMultiplier;
+    }
+
+    private Vector3 CalculateObstacleAvoidance()
+    {
+        Vector3 avoidForce = Vector3.zero;
+        RaycastHit hit;
+
+        // Проверка вперед
+        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidDistance, obstacleLayer))
         {
-            float speedMultiplier = currentDistance < slowDownDistance ?
-                Mathf.Clamp01(currentDistance / slowDownDistance) : 1f;
+            avoidForce += hit.normal * obstacleAvoidForce;
+        }
 
-            if (!Physics.Raycast(transform.position, transform.forward, 1f, obstacleLayer))
+        // Проверка по диагоналям
+        Vector3[] rayDirections = new Vector3[] {
+            transform.forward + transform.right,
+            transform.forward - transform.right
+        };
+
+        foreach (Vector3 dir in rayDirections)
+        {
+            if (Physics.Raycast(transform.position, dir, out hit, obstacleAvoidDistance * 0.7f, obstacleLayer))
             {
-                rb.linearVelocity = transform.forward * moveSpeed * speedMultiplier;
-            }
-            else
-            {
-                Vector3 avoidDirection = Vector3.Cross(Vector3.up, transform.forward).normalized;
-                rb.linearVelocity = avoidDirection * moveSpeed * 0.5f;
+                avoidForce += hit.normal * obstacleAvoidForce * 0.5f;
             }
         }
-        else
-        {
-            rb.linearVelocity = Vector3.zero;
-        }
+
+        return avoidForce;
     }
 
     private void UpdateAnimations()
     {
-        bool isMoving = rb.linearVelocity.magnitude > 0.1f && !isAttacking;
+        bool isMoving = rb.velocity.magnitude > 0.1f && !isAttacking;
         animator.SetBool("isWalking", isMoving);
-
-        // isAttacking уже управляется в PerformAttack
     }
 
     private void StartFollowingPlayer()
     {
         isFollowingPlayer = true;
         isWaiting = false;
+        shouldReturnToPath = false;
         StopAllCoroutines();
-    }
-
-    private void StopFollowingPlayer()
-    {
-        isFollowingPlayer = false;
-        currentWaypointIndex = GetNearestWaypointIndex();
-        lastWaypointPosition = waypoints[currentWaypointIndex].position;
     }
 
     private int GetNearestWaypointIndex()
@@ -218,7 +250,7 @@ public class Stalker : MonoBehaviour
     private IEnumerator WaitAtWaypoint()
     {
         isWaiting = true;
-        rb.linearVelocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
         yield return new WaitForSeconds(waitTime);
 
         currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
@@ -228,26 +260,12 @@ public class Stalker : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, playerDetectionRadius);
+        // Визуализация лучей для обхода препятствий
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawRay(transform.position, transform.forward * obstacleAvoidDistance);
+        Gizmos.DrawRay(transform.position, (transform.forward + transform.right) * obstacleAvoidDistance * 0.7f);
+        Gizmos.DrawRay(transform.position, (transform.forward - transform.right) * obstacleAvoidDistance * 0.7f);
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackDistance);
-
-        if (waypoints != null && waypoints.Length > 0)
-        {
-            Gizmos.color = Color.blue;
-            for (int i = 0; i < waypoints.Length; i++)
-            {
-                if (waypoints[i] != null)
-                {
-                    Gizmos.DrawSphere(waypoints[i].position, 0.2f);
-                    if (i < waypoints.Length - 1 && waypoints[i + 1] != null)
-                    {
-                        Gizmos.DrawLine(waypoints[i].position, waypoints[i + 1].position);
-                    }
-                }
-            }
-        }
+        // Остальные Gizmos...
     }
 }
