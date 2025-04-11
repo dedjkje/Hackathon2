@@ -3761,6 +3761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939237e50812c474cb8159af64958a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCollision: 0
 --- !u!1 &1855069812
 GameObject:
   m_ObjectHideFlags: 0
@@ -3946,6 +3947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939237e50812c474cb8159af64958a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCollision: 0
 --- !u!54 &1876447626
 Rigidbody:
   m_ObjectHideFlags: 0

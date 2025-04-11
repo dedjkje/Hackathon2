@@ -36,9 +36,6 @@ public class Abilities : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(castPull.PullStarted) defaultUI[0].SetActive(false);
-        if(castPull.PullEnded) defaultUI[0].SetActive(true);
-
         if (changing) foreach (GameObject i in decals) i.SetActive(true);
         else foreach (GameObject i in decals) i.SetActive(false);
 
@@ -93,6 +90,7 @@ public class Abilities : MonoBehaviour
         if (currentAbility == Ability.PullObject)
         {
             castPull.Pull();
+            hand.SetTrigger("cast pull");
         }
         if (currentAbility == Ability.AddGravity)
         {

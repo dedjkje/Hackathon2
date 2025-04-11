@@ -23,9 +23,12 @@ public class CastPull : MonoBehaviour
     private Vector3 distance;
     private Rigidbody rb;
     private Vector3 target;
+    
+    
 
     void Start()
     {
+        
         PullStarted = false;
         PullEnded = true;
         animationEnded = false;
@@ -44,7 +47,7 @@ public class CastPull : MonoBehaviour
                 rb.linearVelocity.y,
                 target.z - rb.transform.position.z);
             rb.linearVelocity = distance / time;
-            if (Vector3.Distance(target, rb.transform.position) < 2 || rb.linearVelocity.magnitude < 0.01f)
+            if (Vector3.Distance(target, rb.transform.position) < 2 || rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision)
             {
                 PullEnded = true;
                 PullStarted = false;
