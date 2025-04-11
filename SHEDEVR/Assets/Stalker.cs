@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Stalker : MonoBehaviour
 {
+    public Settings settings;
     [Header("Waypoints")]
     public Transform[] waypoints;
 
@@ -36,6 +37,13 @@ public class Stalker : MonoBehaviour
     private float lastAttackTime = 0f;
     private Vector3 lastWaypointPosition;
     private Vector3 currentAvoidDirection;
+
+    [Header("Stalker")]
+    public bool isDead = false;
+    public GameObject Alive;
+    public GameObject Dead;
+    public AudioSource audioSource;
+    public AudioClip deathAudio;
 
     void Start()
     {
@@ -257,5 +265,22 @@ public class Stalker : MonoBehaviour
         Gizmos.DrawRay(transform.position, transform.forward * obstacleAvoidDistance);
         Gizmos.DrawRay(transform.position, (transform.forward + transform.right) * obstacleAvoidDistance * 0.7f);
         Gizmos.DrawRay(transform.position, (transform.forward - transform.right) * obstacleAvoidDistance * 0.7f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<CanKillStalker>() && collision.rigidbody.linearVelocity.magnitude > 0.8f)
+        {
+            if (!isDead)
+            {
+                gameObject.GetComponent<Stalker>().enabled = false;
+                Alive.SetActive(false);
+                Dead.transform.parent = null;
+                Dead.SetActive(true);
+                audioSource.PlayOneShot(deathAudio, settings.volume);
+                
+                isDead = true;
+            }
+        }
     }
 }
