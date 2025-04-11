@@ -79,7 +79,7 @@ public class Stalker : MonoBehaviour
     private IEnumerator PerformAttack()
     {
         isAttacking = true;
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         animator.SetBool("isAttacking", true);
         lastAttackTime = Time.time;
 
@@ -101,7 +101,6 @@ public class Stalker : MonoBehaviour
         float distanceFromWaypoint = Vector3.Distance(transform.position, lastWaypointPosition);
         bool playerInRange = distanceToPlayer <= playerDetectionRadius;
 
-        // Принятие решения о возврате на маршрут
         if (shouldReturnToPath)
         {
             if (distanceFromWaypoint <= 0.5f)
@@ -112,7 +111,6 @@ public class Stalker : MonoBehaviour
             return;
         }
 
-        // Логика следования за игроком
         if (playerInRange && playerController != null)
         {
             if (!isFollowingPlayer && distanceFromWaypoint <= maxDistanceFromWaypoint)
@@ -140,7 +138,7 @@ public class Stalker : MonoBehaviour
     {
         if (isAttacking || isWaiting)
         {
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             return;
         }
 
@@ -165,11 +163,9 @@ public class Stalker : MonoBehaviour
         Vector3 directionToTarget = (targetPosition - transform.position).normalized;
         directionToTarget.y = 0;
 
-        // Обход препятствий
         Vector3 avoidForce = CalculateObstacleAvoidance();
         Vector3 finalDirection = (directionToTarget + avoidForce).normalized;
 
-        // Поворот
         if (finalDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(finalDirection);
@@ -180,11 +176,10 @@ public class Stalker : MonoBehaviour
             );
         }
 
-        // Движение
         float speedMultiplier = currentDistance < slowDownDistance ?
             Mathf.Clamp01(currentDistance / slowDownDistance) : 1f;
 
-        rb.velocity = transform.forward * moveSpeed * speedMultiplier;
+        rb.linearVelocity = transform.forward * moveSpeed * speedMultiplier;
     }
 
     private Vector3 CalculateObstacleAvoidance()
@@ -192,13 +187,11 @@ public class Stalker : MonoBehaviour
         Vector3 avoidForce = Vector3.zero;
         RaycastHit hit;
 
-        // Проверка вперед
         if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleAvoidDistance, obstacleLayer))
         {
             avoidForce += hit.normal * obstacleAvoidForce;
         }
 
-        // Проверка по диагоналям
         Vector3[] rayDirections = new Vector3[] {
             transform.forward + transform.right,
             transform.forward - transform.right
@@ -217,7 +210,7 @@ public class Stalker : MonoBehaviour
 
     private void UpdateAnimations()
     {
-        bool isMoving = rb.velocity.magnitude > 0.1f && !isAttacking;
+        bool isMoving = rb.linearVelocity.magnitude > 0.1f && !isAttacking;
         animator.SetBool("isWalking", isMoving);
     }
 
@@ -250,7 +243,7 @@ public class Stalker : MonoBehaviour
     private IEnumerator WaitAtWaypoint()
     {
         isWaiting = true;
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         yield return new WaitForSeconds(waitTime);
 
         currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
@@ -260,12 +253,9 @@ public class Stalker : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // Визуализация лучей для обхода препятствий
         Gizmos.color = Color.cyan;
         Gizmos.DrawRay(transform.position, transform.forward * obstacleAvoidDistance);
         Gizmos.DrawRay(transform.position, (transform.forward + transform.right) * obstacleAvoidDistance * 0.7f);
         Gizmos.DrawRay(transform.position, (transform.forward - transform.right) * obstacleAvoidDistance * 0.7f);
-
-        // Остальные Gizmos...
     }
 }
