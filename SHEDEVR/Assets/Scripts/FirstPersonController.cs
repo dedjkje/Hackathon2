@@ -26,6 +26,8 @@ public class FirstPersonController : MonoBehaviour
     private float cameraPitch;
     private Vector3 previousPosition;
 
+    public float hp = 100f;
+
     void Start()
     {
         moveDelta = transform.position;
