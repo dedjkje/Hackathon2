@@ -24,16 +24,21 @@ public class Abilities : MonoBehaviour
     };
 
     public Ability currentAbility = Ability.ChangeGravity;
+
+    private CastPull castPull;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        castPull = GetComponent<CastPull>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(castPull.PullStarted) defaultUI[0].SetActive(false);
+        if(castPull.PullEnded) defaultUI[0].SetActive(true);
+
         if (changing) foreach (GameObject i in decals) i.SetActive(true);
         else foreach (GameObject i in decals) i.SetActive(false);
 
@@ -46,6 +51,15 @@ public class Abilities : MonoBehaviour
     public void nextAbility()
     {
         currentAbility = (Ability)((int)(currentAbility + 1) % 4);
+
+        if (currentAbility == Ability.PullObject)
+        {
+            castPull.canPull = true;
+        }
+        else
+        {
+            castPull.canPull = false;
+        }
     }
 
     public void prevAbility()
@@ -53,6 +67,15 @@ public class Abilities : MonoBehaviour
         preChange = (int)(currentAbility - 1);
         if (preChange == -1) currentAbility = Ability.Katana;
         else currentAbility = (Ability)preChange;
+
+        if (currentAbility == Ability.PullObject)
+        {
+            castPull.canPull = true;
+        }
+        else
+        {
+            castPull.canPull = false;
+        }
     }
     public void changeAbility()
     {
@@ -65,19 +88,19 @@ public class Abilities : MonoBehaviour
     {
         if (currentAbility == Ability.ChangeGravity)
         {
-            // код
+            // code
         }
         if (currentAbility == Ability.PullObject)
         {
-            // код
+            castPull.Pull();
         }
         if (currentAbility == Ability.AddGravity)
         {
-            // код
+            // code
         }
         if (currentAbility == Ability.Katana)
         {
-            // код
+            // code
         }
     }
 
