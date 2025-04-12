@@ -7,6 +7,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpPower;
     [SerializeField] float gravityPower;
+    [SerializeField] public float hp;
 
     [Header("Джойстик")]
     [SerializeField] Joystick joystick;

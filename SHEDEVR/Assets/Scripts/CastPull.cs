@@ -20,7 +20,7 @@ public class CastPull : MonoBehaviour
     [Header("¬рем€ прит€гивани€")]
     [SerializeField] float time;
 
-    private GameObject pullable;
+    [HideInInspector] public GameObject pullable;
     private bool canMove = false;
     private Vector3 distance;
     private Rigidbody rb;
@@ -69,7 +69,7 @@ public class CastPull : MonoBehaviour
             Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100f))
+            if (Physics.Raycast(ray, out hit, 100f) && PullEnded)
             {
                 if (hit.collider.gameObject.GetComponent<PullableFlag>())
                 {
@@ -90,13 +90,6 @@ public class CastPull : MonoBehaviour
                 {
                     onTarget = false;
                 }
-            }
-        }
-        else
-        {
-            if (pullable != null) {
-                pullable.GetComponent<Outline>().OutlineWidth = 0f;
-                pullable = null;
             }
         }
     }

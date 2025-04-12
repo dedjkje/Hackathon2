@@ -95,7 +95,7 @@ public class Abilities : MonoBehaviour
         if (currentAbility == Ability.PullObject)
         {
             castPull.Pull();
-            hand.SetBool("pull", true);
+            if (castPull.pullable != null) hand.SetBool("pull", true);
         }
         if (currentAbility == Ability.AddGravity)
         {
