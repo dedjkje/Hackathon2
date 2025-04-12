@@ -43,6 +43,11 @@ public class Abilities : MonoBehaviour
         if (currentAbility == Ability.PullObject) abilityMaterial.color = abilityColors[1];
         if (currentAbility == Ability.AddGravity) abilityMaterial.color = abilityColors[2];
         if (currentAbility == Ability.Katana) abilityMaterial.color = abilityColors[3];
+
+        if (castPull.PullStarted && !castPull.PullEnded) defaultUI[0].SetActive(false);
+        if (castPull.PullStarted || castPull.stopAnimation) hand.SetBool("pull", false);
+        if (currentAbility == Ability.PullObject && castPull.PullEnded && !castPull.onTarget) defaultUI[0].SetActive(false);
+        if (currentAbility == Ability.PullObject && castPull.PullEnded && castPull.onTarget) defaultUI[0].SetActive(true);
     }
 
     public void nextAbility()
@@ -90,7 +95,7 @@ public class Abilities : MonoBehaviour
         if (currentAbility == Ability.PullObject)
         {
             castPull.Pull();
-            hand.SetTrigger("cast pull");
+            hand.SetBool("pull", true);
         }
         if (currentAbility == Ability.AddGravity)
         {

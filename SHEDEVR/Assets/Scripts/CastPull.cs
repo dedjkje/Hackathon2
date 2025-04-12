@@ -8,6 +8,8 @@ public class CastPull : MonoBehaviour
     [HideInInspector] public bool PullStarted;
     [HideInInspector] public bool PullEnded;
     [HideInInspector] public bool animationEnded;
+    [HideInInspector] public bool onTarget;
+    [HideInInspector] public bool stopAnimation;
 
     [Header("Камера")]
     [SerializeField] Camera playerCamera;
@@ -23,8 +25,8 @@ public class CastPull : MonoBehaviour
     private Vector3 distance;
     private Rigidbody rb;
     private Vector3 target;
-    
-    
+
+    private float timer;
 
     void Start()
     {
@@ -47,8 +49,9 @@ public class CastPull : MonoBehaviour
                 rb.linearVelocity.y,
                 target.z - rb.transform.position.z);
             rb.linearVelocity = distance / time;
-            if (Vector3.Distance(target, rb.transform.position) < 2 || rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision)
+            if (Vector3.Distance(target, rb.transform.position) < 2 || rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision || Time.time - timer > 3f)
             {
+                stopAnimation = true;
                 PullEnded = true;
                 PullStarted = false;
                 rb.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
@@ -70,6 +73,7 @@ public class CastPull : MonoBehaviour
             {
                 if (hit.collider.gameObject.GetComponent<PullableFlag>())
                 {
+                    onTarget = true;
                     if (pullable != hit.collider.gameObject && pullable != null)
                     {
                         pullable.GetComponent<Outline>().OutlineWidth = 0f;
@@ -81,6 +85,10 @@ public class CastPull : MonoBehaviour
                 {
                     pullable.GetComponent<Outline>().OutlineWidth = 0f;
                     pullable = null;
+                }
+                else
+                {
+                    onTarget = false;
                 }
             }
         }
@@ -95,11 +103,13 @@ public class CastPull : MonoBehaviour
 
     public void Pull()
     {
+        stopAnimation = false;
         if (pullable != null && canPull && animationEnded)
         {
             rb = pullable.GetComponent<Rigidbody>();
             target = playerCamera.transform.position;
             canMove = true;
+            timer = Time.time;
         }
     }
     public void End()

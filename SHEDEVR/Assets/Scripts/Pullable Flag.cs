@@ -23,6 +23,13 @@ public class PullableFlag : MonoBehaviour
             playerCollision = true;
         }
     }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<CharacterController>())
+        {
+            playerCollision = true;
+        }
+    }
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.GetComponent<CharacterController>())
