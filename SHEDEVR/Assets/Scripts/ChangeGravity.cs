@@ -72,7 +72,11 @@ public class ChangeGravity : MonoBehaviour
     public void change()
     {
         if (wall()[0] == 'z') z = float.Parse(wall().Substring(7));
-        if (wall()[0] == 'x') x = float.Parse(wall().Substring(7));
+        if (wall()[0] == 'x')
+        {
+            x = float.Parse(wall().Substring(7));
+            z = 0;
+        }
         StartCoroutine(CinemaRotate(x, 0, z, 1));
     }
 }
