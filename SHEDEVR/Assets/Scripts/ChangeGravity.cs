@@ -13,6 +13,7 @@ public class ChangeGravity : MonoBehaviour
 
     public float x = 0;
     public float z = 0;
+    public float y = 0;
 
     public bool isRotating = false;
     void Start()
@@ -55,12 +56,12 @@ public class ChangeGravity : MonoBehaviour
         isRotating = true;
         float elapsed = 0f;
         Quaternion initialRotation = rotate.transform.rotation;
-        Quaternion targetRotation = Quaternion.Euler(x, y, z) * initialRotation;
+        Quaternion targetRotation = Quaternion.Euler(x, 0, z) * initialRotation;
 
         while (elapsed < duration)
         {
             float t = elapsed / duration;
-            rotate.transform.rotation = Quaternion.Slerp(rotate.transform.rotation, targetRotation, t);
+            rotate.transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -71,7 +72,12 @@ public class ChangeGravity : MonoBehaviour
 
     public void change()
     {
-        if (wall()[0] == 'z') z = float.Parse(wall().Substring(7));
+        if (wall()[0] == 'z')
+        {
+            z = float.Parse(wall().Substring(7));
+            y = -x;
+            x = 0;
+        }
         if (wall()[0] == 'x')
         {
             x = float.Parse(wall().Substring(7));

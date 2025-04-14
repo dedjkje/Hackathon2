@@ -26,12 +26,14 @@ public class Abilities : MonoBehaviour
     public Ability currentAbility = Ability.ChangeGravity;
 
     private CastPull castPull;
+    private up addGravity;
     private ChangeGravity changeGravity;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         castPull = GetComponent<CastPull>();
+        addGravity = GetComponent<up>();
         changeGravity = GetComponent<ChangeGravity>();
     }
 
@@ -66,6 +68,15 @@ public class Abilities : MonoBehaviour
         {
             castPull.canPull = false;
         }
+
+        if (currentAbility == Ability.AddGravity)
+        {
+            addGravity.canCast = true;
+        }
+        else
+        {
+            addGravity.canCast = false;
+        }
     }
 
     public void prevAbility()
@@ -81,6 +92,15 @@ public class Abilities : MonoBehaviour
         else
         {
             castPull.canPull = false;
+        }
+
+        if (currentAbility == Ability.AddGravity)
+        {
+            addGravity.canCast = true;
+        }
+        else
+        {
+            addGravity.canCast = false;
         }
     }
     public void changeAbility()

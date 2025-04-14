@@ -10,6 +10,7 @@ TagManager:
   - x wall 90
   - x wall 180
   - x wall -90
+  - predict
   layers:
   - Default
   - TransparentFX
