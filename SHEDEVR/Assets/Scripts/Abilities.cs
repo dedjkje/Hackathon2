@@ -26,11 +26,13 @@ public class Abilities : MonoBehaviour
     public Ability currentAbility = Ability.ChangeGravity;
 
     private CastPull castPull;
+    private ChangeGravity changeGravity;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         castPull = GetComponent<CastPull>();
+        changeGravity = GetComponent<ChangeGravity>();
     }
 
     // Update is called once per frame
@@ -48,6 +50,8 @@ public class Abilities : MonoBehaviour
         if (castPull.PullStarted || castPull.stopAnimation) hand.SetBool("pull", false);
         if (currentAbility == Ability.PullObject && castPull.PullEnded && !castPull.onTarget) defaultUI[0].SetActive(false);
         if (currentAbility == Ability.PullObject && castPull.PullEnded && castPull.onTarget) defaultUI[0].SetActive(true);
+
+        
     }
 
     public void nextAbility()
@@ -90,7 +94,7 @@ public class Abilities : MonoBehaviour
     {
         if (currentAbility == Ability.ChangeGravity)
         {
-            // code
+            changeGravity.change();
         }
         if (currentAbility == Ability.PullObject)
         {
