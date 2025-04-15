@@ -53,12 +53,15 @@ public class Abilities : MonoBehaviour
         if (currentAbility == Ability.AddGravity) abilityMaterial.color = abilityColors[2];
         if (currentAbility == Ability.Katana) abilityMaterial.color = abilityColors[3];
 
+        if (currentAbility == Ability.PullObject) defaultUI[0].SetActive(false);
         if (castPull.PullStarted && !castPull.PullEnded) defaultUI[0].SetActive(false);
         if (castPull.PullStarted || castPull.stopAnimation) hand.SetBool("pull", false);
         if (currentAbility == Ability.PullObject && castPull.PullEnded && !castPull.onTarget) defaultUI[0].SetActive(false);
-        if (currentAbility == Ability.PullObject && castPull.PullEnded && castPull.onTarget) defaultUI[0].SetActive(true);
+        if (currentAbility == Ability.PullObject && castPull.PullEnded && castPull.onTarget && !changing) defaultUI[0].SetActive(true);
 
         if (currentAbility == Ability.AddGravity && !castDeleted) defaultUI[0].SetActive(addGravity.animEnded);
+
+        if (changing) defaultUI[0].SetActive(false);
     }
 
     public void nextAbility()
@@ -110,6 +113,7 @@ public class Abilities : MonoBehaviour
     }
     public void changeAbility()
     {
+        DeleteCast();
         hand.SetBool("change", true);
         foreach (GameObject i in abilitiesUI) i.SetActive(true);
         foreach (GameObject i in defaultUI) i.SetActive(false);
@@ -156,17 +160,26 @@ public class Abilities : MonoBehaviour
     }
     public void castEnded()
     {
-        addGravity.canCast = true;
-        hand.SetBool("cilinder", false);
-        castDeleted = false;
+        
+        
+            addGravity.canCast = true;
+            hand.SetBool("cilinder", false);
+            castDeleted = false;
+        
     }
     public void DeleteCast()
     {
-        defaultUI[0].SetActive(false);
-        castDeleted = true;
+        
+        
+            defaultUI[0].SetActive(false);
+            castDeleted = true;
+       
     }
     public void AddCast() {
-        defaultUI[0].SetActive(true);
-        castDeleted = false;
+        
+        
+            defaultUI[0].SetActive(true);
+            castDeleted = false;
+        
     }
 }

@@ -29,6 +29,10 @@ public class UpFlag : MonoBehaviour
 
     void Update()
     {
+        if (GameObject.Find("Player").transform.Find("Hand").gameObject.GetComponent<Abilities>().changing)
+        {
+            outline.OutlineWidth = 0;
+        }
         if (holder != null)
         {
             distance = new Vector3(

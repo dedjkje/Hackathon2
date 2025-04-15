@@ -30,11 +30,14 @@ public class CastPull : MonoBehaviour
     private Rigidbody rb;
     private Vector3 target;
     public int staticCount;
-
+    private Abilities abilities;
     private float timer;
+    private Animator animator;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
+        abilities = GetComponent<Abilities>();
         staticCount = 0;
         PullStarted = false;
         PullEnded = true;
@@ -71,7 +74,7 @@ public class CastPull : MonoBehaviour
 
     void Update()
     {
-        if (canPull && animationEnded && PullEnded) {
+        if (canPull && animationEnded && PullEnded && !abilities.changing && !animator.GetBool("change")) {
             Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
             RaycastHit hit;
 
@@ -96,6 +99,15 @@ public class CastPull : MonoBehaviour
                 {
                     onTarget = false;
                 }
+            }
+        }
+        else
+        {
+            onTarget = false;
+            if (pullable != null)
+            {
+                pullable.GetComponent<Outline>().OutlineWidth = 0f;
+                pullable = null;
             }
         }
     }
