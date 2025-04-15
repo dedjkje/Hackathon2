@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Abilities : MonoBehaviour
@@ -28,10 +29,12 @@ public class Abilities : MonoBehaviour
     private CastPull castPull;
     private up addGravity;
     private ChangeGravity changeGravity;
+    public bool castDeleted;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        castDeleted = false;
         castPull = GetComponent<CastPull>();
         addGravity = GetComponent<up>();
         changeGravity = GetComponent<ChangeGravity>();
@@ -43,6 +46,8 @@ public class Abilities : MonoBehaviour
         if (changing) foreach (GameObject i in decals) i.SetActive(true);
         else foreach (GameObject i in decals) i.SetActive(false);
 
+        if (!hand.GetBool("cilinder")) AddCast();
+
         if (currentAbility == Ability.ChangeGravity) abilityMaterial.color = abilityColors[0];
         if (currentAbility == Ability.PullObject) abilityMaterial.color = abilityColors[1];
         if (currentAbility == Ability.AddGravity) abilityMaterial.color = abilityColors[2];
@@ -53,7 +58,7 @@ public class Abilities : MonoBehaviour
         if (currentAbility == Ability.PullObject && castPull.PullEnded && !castPull.onTarget) defaultUI[0].SetActive(false);
         if (currentAbility == Ability.PullObject && castPull.PullEnded && castPull.onTarget) defaultUI[0].SetActive(true);
 
-        
+        if (currentAbility == Ability.AddGravity && !castDeleted) defaultUI[0].SetActive(addGravity.animEnded);
     }
 
     public void nextAbility()
@@ -123,7 +128,8 @@ public class Abilities : MonoBehaviour
         }
         if (currentAbility == Ability.AddGravity)
         {
-            // code
+            if (addGravity.Predict.transform.position != new Vector3(0, -1000f, 0)) hand.SetBool("cilinder", true);
+            addGravity.Cast();
         }
         if (currentAbility == Ability.Katana)
         {
@@ -147,5 +153,20 @@ public class Abilities : MonoBehaviour
     {
 
         changing = false;
+    }
+    public void castEnded()
+    {
+        addGravity.canCast = true;
+        hand.SetBool("cilinder", false);
+        castDeleted = false;
+    }
+    public void DeleteCast()
+    {
+        defaultUI[0].SetActive(false);
+        castDeleted = true;
+    }
+    public void AddCast() {
+        defaultUI[0].SetActive(true);
+        castDeleted = false;
     }
 }
