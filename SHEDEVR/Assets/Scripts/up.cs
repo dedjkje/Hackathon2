@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class up : MonoBehaviour
 {
+    [SerializeField] public GameObject Parent;
     [SerializeField] public GameObject Predict;
+    [SerializeField] public GameObject Cilinder;
+    private GameObject cilinder;
     [SerializeField] Camera playerCamera;
     public bool canCast;
     [SerializeField] LayerMask raycastMask;
@@ -68,7 +71,7 @@ public class up : MonoBehaviour
                         hit.point.x,
                         hit.point.y + 0.002f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(0f + changeGravity.x, 0f, -90f + changeGravity.z);
+                    Predict.transform.rotation = Quaternion.Euler(0f + changeGravity.x, 0f, 90f - changeGravity.z);
                 }
                 else if (hit.collider.tag == "z wall 90")
                 {
@@ -76,7 +79,7 @@ public class up : MonoBehaviour
                         hit.point.x,
                         hit.point.y + 0.002f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(0f + changeGravity.x, 0f, 90f + changeGravity.z);
+                    Predict.transform.rotation = Quaternion.Euler(0f + changeGravity.x, 0f, -90f - changeGravity.z);
                 }
                 else
                 {
@@ -93,6 +96,9 @@ public class up : MonoBehaviour
 
     public void Cast()
     {
+        Destroy(cilinder);
+        cilinder = Instantiate(Cilinder, Predict.transform.position, Predict.transform.rotation);
+        cilinder.transform.parent = Parent.transform;
         canCast = false;
     }
 }
