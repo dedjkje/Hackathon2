@@ -1719,7 +1719,11 @@ MonoBehaviour:
   playerCamera: {fileID: 470800847}
   width: 7
   time: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 183
   pullable: {fileID: 0}
+  staticCount: 0
 --- !u!114 &661179643
 MonoBehaviour:
   m_ObjectHideFlags: 0

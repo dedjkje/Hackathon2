@@ -11,6 +11,7 @@ TagManager:
   - x wall 180
   - x wall -90
   - predict
+  - cilinder
   layers:
   - Default
   - TransparentFX

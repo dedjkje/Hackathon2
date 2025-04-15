@@ -1,12 +1,13 @@
 using Mono.Cecil;
 using System.Diagnostics.Contracts;
 using UnityEngine;
+using System;
 
 public class CastPull : MonoBehaviour
 {
     [HideInInspector] public bool canPull;
     [HideInInspector] public bool PullStarted;
-    [HideInInspector] public bool PullEnded;
+     public bool PullEnded;
     [HideInInspector] public bool animationEnded;
     [HideInInspector] public bool onTarget;
     [HideInInspector] public bool stopAnimation;
@@ -20,17 +21,21 @@ public class CastPull : MonoBehaviour
     [Header("¬рем€ прит€гивани€")]
     [SerializeField] float time;
 
+    [Header("—квозь что проходит луч")]
+    [SerializeField] LayerMask layerMask;
+
     [HideInInspector] public GameObject pullable;
     private bool canMove = false;
     private Vector3 distance;
     private Rigidbody rb;
     private Vector3 target;
+    public int staticCount;
 
     private float timer;
 
     void Start()
     {
-        
+        staticCount = 0;
         PullStarted = false;
         PullEnded = true;
         animationEnded = false;
@@ -42,20 +47,21 @@ public class CastPull : MonoBehaviour
         {
             PullStarted = true;
             PullEnded = false;
-            rb.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
             rb.gameObject.GetComponent<Outline>().OutlineWidth = width;
+            rb.gameObject.GetComponent<Outline>().OutlineColor = new Color(1f, 180f/250f, 0f, 1f);
             distance = new Vector3(
                 target.x - rb.transform.position.x,
                 rb.linearVelocity.y,
                 target.z - rb.transform.position.z);
+            
             rb.linearVelocity = distance / time;
-            if (Vector3.Distance(target, rb.transform.position) < 2 || rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision || Time.time - timer > 3f)
-            {
+            if ((Vector3.Distance(target, rb.transform.position) < 2)|| rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision || (Time.time - timer > 3f))
+            { 
                 stopAnimation = true;
                 PullEnded = true;
                 PullStarted = false;
                 rb.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
-                rb.linearVelocity = Vector3.zero;
+                rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
                 rb.constraints = RigidbodyConstraints.None;
                 rb = null;
                 canMove = false;
@@ -69,7 +75,7 @@ public class CastPull : MonoBehaviour
             Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100f) && PullEnded)
+            if (Physics.Raycast(ray, out hit, 100f, layerMask) && PullEnded)
             {
                 if (hit.collider.gameObject.GetComponent<PullableFlag>())
                 {
@@ -99,7 +105,17 @@ public class CastPull : MonoBehaviour
         stopAnimation = false;
         if (pullable != null && canPull && animationEnded)
         {
+            staticCount = 0;
             rb = pullable.GetComponent<Rigidbody>();
+            Debug.Log($"{Math.Abs(Math.Round(pullable.transform.eulerAngles.x)) % 90}, {Math.Abs(Math.Round(pullable.transform.eulerAngles.y)) % 90}, {Math.Abs(Math.Round(pullable.transform.eulerAngles.z)) % 90}");
+            if (Math.Abs(Math.Round(pullable.transform.eulerAngles.x)) % 90 == 0) staticCount++;
+            if (Math.Abs(Math.Round(pullable.transform.eulerAngles.y)) % 90 == 0) staticCount++;
+            if (Math.Abs(Math.Round(pullable.transform.eulerAngles.z)) % 90 == 0) staticCount++;
+            Debug.Log(staticCount);
+            if (staticCount >= 2)
+            {
+                rb.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+            }
             target = playerCamera.transform.position;
             canMove = true;
             timer = Time.time;
