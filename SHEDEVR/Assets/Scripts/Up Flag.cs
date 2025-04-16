@@ -13,9 +13,15 @@ public class UpFlag : MonoBehaviour
     private Vector3 distance;
     private bool backOutline;
     private Abilities abilities;
+    private Vector3 originalScale;
+    private bool isKinematic;
+    private ChangeGravity changeGravity;
+    private GameObject currentCilinder;
 
     void Start()
     {
+        originalScale = transform.localScale;
+        changeGravity = GameObject.Find("Player").transform.Find("Hand").gameObject.GetComponent<ChangeGravity>();
         abilities = GameObject.Find("Player").transform.Find("Hand").gameObject.GetComponent<Abilities>();
         holder = null;
         rb = GetComponent<Rigidbody>();
@@ -29,6 +35,16 @@ public class UpFlag : MonoBehaviour
 
     void Update()
     {
+        if (changeGravity.isRotating && currentCilinder != null)
+        {
+            transform.SetParent(currentCilinder.transform, true);
+            rb.isKinematic = true;
+        }
+        if (!changeGravity.isRotating && currentCilinder != null)
+        {
+            transform.SetParent(null, true);
+            rb.isKinematic = false;
+        }
         if (GameObject.Find("Player").transform.Find("Hand").gameObject.GetComponent<Abilities>().changing)
         {
             outline.OutlineWidth = 0;
@@ -76,7 +92,8 @@ public class UpFlag : MonoBehaviour
         }
         if (other.tag == "cilinder")
         {
-            holder = other.gameObject.transform.Find("Holder").gameObject;
+            currentCilinder = other.gameObject;
+            holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;
             rb.useGravity = false;
         }
     }
@@ -97,8 +114,10 @@ public class UpFlag : MonoBehaviour
         }
         if (other.tag == "cilinder")
         {
-            holder = null;
+            currentCilinder = null;
             rb.useGravity = true;
+
+            holder = null;
         }
     }
 }

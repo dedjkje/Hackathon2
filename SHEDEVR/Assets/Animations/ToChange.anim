@@ -343,7 +343,21 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0
+    functionName: NoEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
     functionName: animationStarted
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
+    functionName: DeleteCast
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -353,6 +367,13 @@ AnimationClip:
     functionName: isChangingTrue
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: 824e5576bde7c584b84374cb979f6471, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8333333
+    functionName: End
+    data: 
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
