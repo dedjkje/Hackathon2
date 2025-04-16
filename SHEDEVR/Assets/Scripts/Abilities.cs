@@ -123,7 +123,7 @@ public class Abilities : MonoBehaviour
     {
         if (currentAbility == Ability.ChangeGravity)
         {
-            changeGravity.change();
+            changeGravity.Change();
         }
         if (currentAbility == Ability.PullObject)
         {

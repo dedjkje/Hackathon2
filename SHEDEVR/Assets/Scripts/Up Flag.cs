@@ -8,7 +8,7 @@ public class UpFlag : MonoBehaviour
     private bool hasOutline;
     private float width;
     private Color color;
-    private GameObject holder;
+    public GameObject holder;
     private Rigidbody rb;
     private Vector3 distance;
     private bool backOutline;

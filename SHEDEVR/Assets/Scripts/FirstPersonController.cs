@@ -147,7 +147,18 @@ public class FirstPersonController : MonoBehaviour
 
     private void GamingGravity()
     {
-        if(!characterController.isGrounded && holder == Vector3.zero)
+        if (changeGravity.isRotating)
+        {
+            if (transform.position.y < 10f)
+            {
+                gravityForce = 4f;
+            }
+            else
+            {
+                gravityForce = 0f;
+            }
+        }
+        else if (!characterController.isGrounded && holder == Vector3.zero)
         {
             gravityForce -= gravityPower * Time.deltaTime;
         }
