@@ -59,15 +59,18 @@ public class UpFlag : MonoBehaviour
         }
         else
         {
-            rb.useGravity = true;
-            if (backOutline && abilities.currentAbility == Abilities.Ability.AddGravity)
+            if (!GameObject.Find("Player").transform.Find("Hand").gameObject.GetComponent<ChangeGravity>().isRotating)
             {
-                outline.OutlineWidth = width;
-                outline.OutlineColor = color;
-            }
-            if (abilities.currentAbility == Abilities.Ability.PullObject)
-            {
-                outline.OutlineColor = new Color(1f, 180f / 250f, 0f, 1f);
+                rb.useGravity = true;
+                if (backOutline && abilities.currentAbility == Abilities.Ability.AddGravity)
+                {
+                    outline.OutlineWidth = width;
+                    outline.OutlineColor = color;
+                }
+                if (abilities.currentAbility == Abilities.Ability.PullObject)
+                {
+                    outline.OutlineColor = new Color(1f, 180f / 250f, 0f, 1f);
+                }
             }
         }
     }

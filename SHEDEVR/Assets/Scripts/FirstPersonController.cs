@@ -147,7 +147,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void GamingGravity()
     {
-        if (changeGravity.isRotating)
+        if (changeGravity.isRotating && holder == Vector3.zero)
         {
             if (transform.position.y < 10f)
             {
@@ -157,6 +157,11 @@ public class FirstPersonController : MonoBehaviour
             {
                 gravityForce = 0f;
             }
+        }
+        else if (changeGravity.isRotating && holder != Vector3.zero)
+        {
+            Debug.Log("VOZNYAA");
+            characterController.Move(deltaHolder * Time.deltaTime * 100);
         }
         else if (!characterController.isGrounded && holder == Vector3.zero)
         {

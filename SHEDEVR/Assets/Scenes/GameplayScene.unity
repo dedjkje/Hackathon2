@@ -1819,7 +1819,7 @@ MonoBehaviour:
   time: 1
   layerMask:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 439
   pullable: {fileID: 0}
   staticCount: 0
 --- !u!114 &661179644
@@ -1841,7 +1841,7 @@ MonoBehaviour:
   canCast: 0
   raycastMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 311
   animEnded: 0
 --- !u!114 &661179645
 MonoBehaviour:
@@ -1879,7 +1879,7 @@ MonoBehaviour:
   shakeFrequency: 0.05
   musicController: {fileID: 1367037622}
   targetHeight: 10
-  effectDuration: 4
+  effectDuration: 3
   liftSpeed: 7
 --- !u!1 &700503385
 GameObject:
@@ -4431,6 +4431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3728e557623a80140965de333dec7fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  holder: {fileID: 0}
 --- !u!114 &1777855682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4873,6 +4874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3728e557623a80140965de333dec7fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  holder: {fileID: 0}
 --- !u!114 &1876447633
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -37,49 +37,49 @@ public class up : MonoBehaviour
                 {
                     Predict.transform.position = new Vector3(
                         hit.point.x,
-                        hit.point.y + 0.002f,
+                        hit.point.y + 0.005f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(0f+changeGravity.x, 0f, 0f + changeGravity.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
                 }
                 else if (hit.collider.tag == "x wall 180")
                 {
                     Predict.transform.position = new Vector3(
                         hit.point.x,
-                        hit.point.y + 0.002f,
+                        hit.point.y + 0.005f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(180f + changeGravity.x, 0f, 0f + changeGravity.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
                 }
                 else if (hit.collider.tag == "x wall 90")
                 {
                     Predict.transform.position = new Vector3(
                         hit.point.x,
-                        hit.point.y + 0.002f,
+                        hit.point.y + 0.005f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(90f + changeGravity.x, 0f, 0f + changeGravity.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
                 }
                 else if (hit.collider.tag == "x wall -90")
                 {
                     Predict.transform.position = new Vector3(
                         hit.point.x,
-                        hit.point.y + 0.002f,
+                        hit.point.y + 0.005f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(-90f + changeGravity.x, 0f, 0f + changeGravity.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
                 }
                 else if (hit.collider.tag == "z wall -90")
                 {
                     Predict.transform.position = new Vector3(
                         hit.point.x,
-                        hit.point.y + 0.002f,
+                        hit.point.y + 0.005f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(0f + changeGravity.x, 0f, 90f - changeGravity.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
                 }
                 else if (hit.collider.tag == "z wall 90")
                 {
                     Predict.transform.position = new Vector3(
                         hit.point.x,
-                        hit.point.y + 0.002f,
+                        hit.point.y + 0.005f,
                         hit.point.z);
-                    Predict.transform.rotation = Quaternion.Euler(0f + changeGravity.x, 0f, -90f - changeGravity.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
                 }
                 else
                 {
