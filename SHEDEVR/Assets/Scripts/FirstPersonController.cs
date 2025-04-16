@@ -28,8 +28,9 @@ public class FirstPersonController : MonoBehaviour
     private Vector2 lookInput;
     private float cameraPitch;
     private Vector3 previousPosition;
-    private GameObject holder;
+    private Vector3 holder;
     private Vector3 deltaHolder;
+    private GameObject prevCilinder;
 
     void Start()
     {
@@ -59,16 +60,25 @@ public class FirstPersonController : MonoBehaviour
     {
         GetTouchInput();
         isGrounded = characterController.isGrounded;
+        if (prevCilinder == null)
+        {
+            holder = Vector3.zero;
+            deltaHolder = Vector3.zero;
+        }
     }
 
     private void AddGravity()
     {
-        if (holder != null)
+        if (holder != Vector3.zero)
         {
-            deltaHolder = new Vector3(holder.transform.position.x - transform.position.x, 0, holder.transform.position.z - transform.position.z);
-            if (Vector3.Distance(transform.position, holder.transform.position) > 1f)
+            deltaHolder = new Vector3(holder.x - transform.position.x, 0, holder.z - transform.position.z);
+            if (Vector3.Distance(transform.position, holder) > 1f)
             {
-                gravityForce = (holder.transform.position.y - transform.position.y) / cilinderPower;
+                gravityForce = (holder.y - transform.position.y) / cilinderPower;
+            }
+            else
+            {
+                gravityForce = 0;
             }
         }
     }
@@ -131,11 +141,11 @@ public class FirstPersonController : MonoBehaviour
 
     private void GamingGravity()
     {
-        if(!characterController.isGrounded && holder == null)
+        if(!characterController.isGrounded && holder == Vector3.zero)
         {
             gravityForce -= gravityPower * Time.deltaTime;
         }
-        else if (holder == null)
+        else if (holder == Vector3.zero)
         {
             gravityForce = -1f;
         }
@@ -152,16 +162,15 @@ public class FirstPersonController : MonoBehaviour
     {
         if (other.tag == "cilinder")
         {
-            holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;
-            Debug.Log(holder);
+            holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject.transform.position;
+            prevCilinder = other.gameObject;
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "cilinder")
         {
-            holder = null;
-            Debug.Log(holder);
+            holder = Vector3.zero;
             deltaHolder = Vector3.zero;
         }
     }

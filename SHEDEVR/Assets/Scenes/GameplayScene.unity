@@ -2087,12 +2087,11 @@ MonoBehaviour:
   joystick: {fileID: 254300869}
   cameraSensivity: 20
   cameraTransform: {fileID: 470800844}
+  cilinderPower: 2
   gravityForce: 0
   moveVector: {x: 0, y: 0, z: 0}
   moveDelta: {x: 0, y: 0, z: 0}
   isGrounded: 0
-  attractionForce: 10
-  attractionDeadZone: 0.5
 --- !u!114 &746095334
 MonoBehaviour:
   m_ObjectHideFlags: 0
