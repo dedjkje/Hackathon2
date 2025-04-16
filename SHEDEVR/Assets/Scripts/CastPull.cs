@@ -21,6 +21,9 @@ public class CastPull : MonoBehaviour
     [Header("¬рем€ прит€гивани€")]
     [SerializeField] float time;
 
+    [Header("»сточник звука")]
+    [SerializeField] AudioSource source;
+
     [Header("—квозь что проходит луч")]
     [SerializeField] LayerMask layerMask;
 
@@ -117,6 +120,7 @@ public class CastPull : MonoBehaviour
         stopAnimation = false;
         if (pullable != null && canPull && animationEnded)
         {
+            source.Play();
             staticCount = 0;
             rb = pullable.GetComponent<Rigidbody>();
             Debug.Log($"{Math.Abs(Math.Round(pullable.transform.eulerAngles.x)) % 90}, {Math.Abs(Math.Round(pullable.transform.eulerAngles.y)) % 90}, {Math.Abs(Math.Round(pullable.transform.eulerAngles.z)) % 90}");
