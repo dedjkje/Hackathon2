@@ -31,9 +31,11 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 holder;
     private Vector3 deltaHolder;
     private GameObject prevCilinder;
+    private ChangeGravity changeGravity;
 
     void Start()
     {
+        changeGravity = transform.Find("Hand").gameObject.GetComponent<ChangeGravity>();
         moveDelta = transform.position;
         previousPosition = transform.position;
         characterController = GetComponent<CharacterController>();
@@ -64,6 +66,10 @@ public class FirstPersonController : MonoBehaviour
         {
             holder = Vector3.zero;
             deltaHolder = Vector3.zero;
+        }
+        if (changeGravity.isRotating && prevCilinder != null && holder != Vector3.zero)
+        {
+            // хз пока как это пофиксить
         }
     }
 
