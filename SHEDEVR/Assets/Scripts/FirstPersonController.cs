@@ -16,7 +16,9 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] float cameraSensivity;
     [SerializeField] Transform cameraTransform;
 
-    private float gravityForce;
+    [Header("Цилиндр")]
+    [SerializeField] float cilinderPower;
+    public float gravityForce;
     [HideInInspector] public Vector3 moveVector;
     [HideInInspector] public Vector3 moveDelta;
     [HideInInspector] public bool isGrounded;
@@ -26,6 +28,8 @@ public class FirstPersonController : MonoBehaviour
     private Vector2 lookInput;
     private float cameraPitch;
     private Vector3 previousPosition;
+    private GameObject holder;
+    private Vector3 deltaHolder;
 
     void Start()
     {
@@ -40,6 +44,7 @@ public class FirstPersonController : MonoBehaviour
     {
         MovePlayer();
         GamingGravity();
+        AddGravity();
 
         if (rightFingerId != -1)
         {
@@ -56,6 +61,17 @@ public class FirstPersonController : MonoBehaviour
         isGrounded = characterController.isGrounded;
     }
 
+    private void AddGravity()
+    {
+        if (holder != null)
+        {
+            deltaHolder = new Vector3(holder.transform.position.x - transform.position.x, 0, holder.transform.position.z - transform.position.z);
+            if (Vector3.Distance(transform.position, holder.transform.position) > 1f)
+            {
+                gravityForce = (holder.transform.position.y - transform.position.y) / cilinderPower;
+            }
+        }
+    }
     private void GetTouchInput()
     {
         for (int i = 0; i < Input.touchCount; i++)
@@ -108,18 +124,18 @@ public class FirstPersonController : MonoBehaviour
         moveVector.z = joystick.Vertical;
         moveVector.y = gravityForce;
 
-        moveVector = transform.right * moveVector.x + transform.forward * moveVector.z + transform.up * moveVector.y;
+        moveVector = transform.right * moveVector.x + transform.forward * moveVector.z + transform.up * moveVector.y + deltaHolder / (cilinderPower * 2);
 
         characterController.Move(moveVector * moveSpeed * Time.deltaTime);
     }
 
     private void GamingGravity()
     {
-        if(!characterController.isGrounded)
+        if(!characterController.isGrounded && holder == null)
         {
             gravityForce -= gravityPower * Time.deltaTime;
         }
-        else
+        else if (holder == null)
         {
             gravityForce = -1f;
         }
@@ -130,6 +146,23 @@ public class FirstPersonController : MonoBehaviour
         if (characterController.isGrounded)
         {
             gravityForce = jumpPower;
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "cilinder")
+        {
+            holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;
+            Debug.Log(holder);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "cilinder")
+        {
+            holder = null;
+            Debug.Log(holder);
+            deltaHolder = Vector3.zero;
         }
     }
 }

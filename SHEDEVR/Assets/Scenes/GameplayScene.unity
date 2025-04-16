@@ -1759,7 +1759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parent: {fileID: 355057781}
   Predict: {fileID: 172193329}
-  Cilinder: {fileID: 7089222564023105395, guid: ab0df91cad606a140a61bb56b751016e, type: 3}
+  Cilinder: {fileID: 7548758223781287574, guid: 5dbf86a25d8db814ba3aa84a85bc6fe8, type: 3}
   playerCamera: {fileID: 470800847}
   canCast: 0
   raycastMask:
@@ -2087,9 +2087,12 @@ MonoBehaviour:
   joystick: {fileID: 254300869}
   cameraSensivity: 20
   cameraTransform: {fileID: 470800844}
+  gravityForce: 0
   moveVector: {x: 0, y: 0, z: 0}
   moveDelta: {x: 0, y: 0, z: 0}
   isGrounded: 0
+  attractionForce: 10
+  attractionDeadZone: 0.5
 --- !u!114 &746095334
 MonoBehaviour:
   m_ObjectHideFlags: 0
