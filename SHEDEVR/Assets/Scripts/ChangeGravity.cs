@@ -12,11 +12,13 @@ public class ChangeGravity : MonoBehaviour
         public string targetWall;
         public Vector3 eulerDelta;
     }
+    [SerializeField] public FirstPersonController firstPersonController;
+    [SerializeField] public GameObject Predict;
     public AudioSource audioSource;
     public AudioClip gravityFlipSound;
     public float soundDuration = 3f; // ����� ������������ �����
     public float fadeOutDuration = 0.5f; // ������������ ���������
-
+    public bool showUI;
     [SerializeField] Camera playerCamera;
     [SerializeField] GameObject[] hideUI;
     [SerializeField] public Transform rotate;
@@ -31,7 +33,7 @@ public class ChangeGravity : MonoBehaviour
     public float z;
     public GameObject[] upableObjects;
     public string targetWall;
-
+    public Animator handAnimator;
     public float shakeIntensity = 0.1f;
     public float shakeFrequency = 0.05f;
 
@@ -126,31 +128,107 @@ public class ChangeGravity : MonoBehaviour
     {
         return new RotationRule { currentWall = current, targetWall = target, eulerDelta = delta };
     }
-
+    private void LateUpdate()
+    {
+        string hitWall = GetWallTag();
+        showUI = hitWall != "null" &&
+                abilities.currentAbility == Abilities.Ability.ChangeGravity &&
+                        firstPersonController.isGrounded &&
+                        hitWall != currentWall &&
+                        !isRotating &&
+                        !abilities.changing &&
+                        rotationRules.Exists(r => r.currentWall == currentWall && r.targetWall == hitWall);
+        
+        if (abilities.currentAbility == Abilities.Ability.ChangeGravity)
+        {
+            showUI = hitWall != "null" &&
+                abilities.currentAbility == Abilities.Ability.ChangeGravity &&
+                        firstPersonController.isGrounded &&
+                        hitWall != currentWall &&
+                        !isRotating &&
+                        !abilities.changing &&
+                        rotationRules.Exists(r => r.currentWall == currentWall && r.targetWall == hitWall);
+            
+            foreach (GameObject go in hideUI) go.SetActive(showUI);
+        }
+    }
     void Update()
     {
         x = rotate.eulerAngles.x;
         y = rotate.eulerAngles.y;
         z = rotate.eulerAngles.z;
-        string hitWall = GetWallTag();
-
-        if (abilities.currentAbility == Abilities.Ability.ChangeGravity)
-        {
-            bool showUI = hitWall != "null" &&
-                        hitWall != currentWall &&
-                        !isRotating &&
-                        !abilities.changing &&
-                        rotationRules.Exists(r => r.currentWall == currentWall && r.targetWall == hitWall);
-
-            foreach (GameObject ui in hideUI) ui.SetActive(showUI);
-        }
-
-        foreach (GameObject go in upableObjects)
-        {
-
-        }
+        
 
         
+
+        if (showUI)
+        {
+            Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 100f, wallLayer))
+            {
+                if (hit.collider.tag == "x wall 0")
+                {
+                    Predict.transform.position = new Vector3(
+                        hit.point.x,
+                        hit.point.y + 0.005f,
+                        hit.point.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                }
+                else if (hit.collider.tag == "x wall 180")
+                {
+                    Predict.transform.position = new Vector3(
+                        hit.point.x,
+                        hit.point.y + 0.005f,
+                        hit.point.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                }
+                else if (hit.collider.tag == "x wall 90")
+                {
+                    Predict.transform.position = new Vector3(
+                        hit.point.x,
+                        hit.point.y + 0.005f,
+                        hit.point.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                }
+                else if (hit.collider.tag == "x wall -90")
+                {
+                    Predict.transform.position = new Vector3(
+                        hit.point.x,
+                        hit.point.y + 0.005f,
+                        hit.point.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                }
+                else if (hit.collider.tag == "z wall -90")
+                {
+                    Predict.transform.position = new Vector3(
+                        hit.point.x,
+                        hit.point.y + 0.005f,
+                        hit.point.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                }
+                else if (hit.collider.tag == "z wall 90")
+                {
+                    Predict.transform.position = new Vector3(
+                        hit.point.x,
+                        hit.point.y + 0.005f,
+                        hit.point.z);
+                    Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                }
+                else
+                {
+                    Predict.transform.position = new Vector3(0, -1000f, 0);
+
+                }
+            }
+        }
+        else
+        {
+            Predict.transform.position = new Vector3(0, -1000f, 0);
+        }
+
+
     }
 
     string GetWallTag()
@@ -202,6 +280,7 @@ public class ChangeGravity : MonoBehaviour
     {
         Debug.Log($"Start: {rotate.rotation.eulerAngles} + Delta: {delta}");
         isRotating = true;
+        handAnimator.SetBool("change grav", true);
         StartCoroutine(GravityEffectRoutine());
         StartShake();
         StartCoroutine(PlaySoundWithFade());
@@ -324,5 +403,9 @@ public class ChangeGravity : MonoBehaviour
                 rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
             }
         }
+    }
+    public void endAnimation()
+    {
+        handAnimator.SetBool("change grav", false);
     }
 }
