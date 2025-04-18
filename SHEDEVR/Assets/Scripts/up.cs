@@ -8,6 +8,7 @@ public class up : MonoBehaviour
     private GameObject cilinder;
     [SerializeField] Camera playerCamera;
     public bool canCast;
+    public bool popal;
     [SerializeField] LayerMask raycastMask;
     private ChangeGravity changeGravity;
     public bool animEnded;
@@ -40,6 +41,7 @@ public class up : MonoBehaviour
                         hit.point.y + 0.005f,
                         hit.point.z);
                     Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                    popal = true;
                 }
                 else if (hit.collider.tag == "x wall 180")
                 {
@@ -48,6 +50,7 @@ public class up : MonoBehaviour
                         hit.point.y + 0.005f,
                         hit.point.z);
                     Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                    popal = true;
                 }
                 else if (hit.collider.tag == "x wall 90")
                 {
@@ -56,6 +59,7 @@ public class up : MonoBehaviour
                         hit.point.y + 0.005f,
                         hit.point.z);
                     Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                    popal = true;
                 }
                 else if (hit.collider.tag == "x wall -90")
                 {
@@ -64,6 +68,7 @@ public class up : MonoBehaviour
                         hit.point.y + 0.005f,
                         hit.point.z);
                     Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                    popal = true;
                 }
                 else if (hit.collider.tag == "z wall -90")
                 {
@@ -72,6 +77,7 @@ public class up : MonoBehaviour
                         hit.point.y + 0.005f,
                         hit.point.z);
                     Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                    popal = true;
                 }
                 else if (hit.collider.tag == "z wall 90")
                 {
@@ -80,17 +86,25 @@ public class up : MonoBehaviour
                         hit.point.y + 0.005f,
                         hit.point.z);
                     Predict.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * Quaternion.Euler(0, 0, 0);
+                    popal = true;
                 }
                 else
                 {
                     Predict.transform.position = new Vector3(0, -1000f, 0);
+                    popal = false;
                     
                 }
+            }
+            else
+            {
+                Predict.transform.position = new Vector3(0, -1000f, 0);
+                popal = false;
             }
         }
         else
         {
             Predict.transform.position = new Vector3(0, -1000f, 0);
+            popal = false;
         }
     }
 

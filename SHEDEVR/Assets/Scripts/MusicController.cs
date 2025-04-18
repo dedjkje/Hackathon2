@@ -16,7 +16,7 @@ public class MusicController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = musicClip;
         audioSource.loop = true;
-        originalVolume = settings.volume * 0.5f;
+        originalVolume = settings.volume * 0.2f;
     }
 
     private void Start()

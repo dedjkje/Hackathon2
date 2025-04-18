@@ -12,6 +12,8 @@ TagManager:
   - x wall -90
   - predict
   - cilinder
+  - button
+  - playerTrigger
   layers:
   - Default
   - TransparentFX

@@ -58,9 +58,10 @@ public class Abilities : MonoBehaviour
         if (castPull.PullStarted || castPull.stopAnimation) hand.SetBool("pull", false);
         if (currentAbility == Ability.PullObject && castPull.PullEnded && !castPull.onTarget) defaultUI[0].SetActive(false);
         if (currentAbility == Ability.PullObject && castPull.PullEnded && castPull.onTarget && !changing) defaultUI[0].SetActive(true);
+        
 
         if (currentAbility == Ability.AddGravity && !castDeleted) defaultUI[0].SetActive(addGravity.animEnded);
-
+        if (currentAbility == Ability.AddGravity) defaultUI[0].SetActive(addGravity.popal);
         if (changing) defaultUI[0].SetActive(false);
     }
 
