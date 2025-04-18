@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
+using static Unity.VisualScripting.Member;
 using static UnityEngine.GraphicsBuffer;
 
 public class UpMonster : MonoBehaviour
@@ -15,9 +16,14 @@ public class UpMonster : MonoBehaviour
     private ChangeGravity changeGravity;
     private GameObject currentCilinder;
     private Stalker stalker;
+    private AudioSource source;
+    [SerializeField] AudioClip cilinderEnter;
+    private float soundInterval = 2f;
+    private float lastPlayTime = 0;
 
     void Start()
     {
+        source = GetComponent<AudioSource>();
         stalker = GetComponent<Stalker>();
         rb = GetComponent<Rigidbody>();
         originalScale = transform.localScale;
@@ -59,6 +65,13 @@ public class UpMonster : MonoBehaviour
     {
         if (other.tag == "cilinder")
         {
+            if (Time.time - lastPlayTime >= soundInterval)
+            {
+                source.clip = cilinderEnter;
+                source.Play();
+                lastPlayTime = Time.time;
+                source.clip = cilinderEnter;
+            }
             stalker.enabled = false;
             currentCilinder = other.gameObject;
             holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;

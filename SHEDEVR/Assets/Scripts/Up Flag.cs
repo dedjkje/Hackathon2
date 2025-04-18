@@ -17,9 +17,14 @@ public class UpFlag : MonoBehaviour
     private bool isKinematic;
     private ChangeGravity changeGravity;
     private GameObject currentCilinder;
+    private AudioSource source;
+    [SerializeField] AudioClip cilinderEnter;
+    private float soundInterval = 2f;
+    private float lastPlayTime = 0;
 
     void Start()
     {
+        source = GetComponent<AudioSource>();
         originalScale = transform.localScale;
         changeGravity = GameObject.Find("Player").transform.Find("Hand").gameObject.GetComponent<ChangeGravity>();
         abilities = GameObject.Find("Player").transform.Find("Hand").gameObject.GetComponent<Abilities>();
@@ -95,6 +100,13 @@ public class UpFlag : MonoBehaviour
         }
         if (other.tag == "cilinder")
         {
+            if (Time.time - lastPlayTime >= soundInterval)
+            {
+                source.clip = cilinderEnter;
+                source.Play();
+                lastPlayTime = Time.time;
+                source.clip = cilinderEnter;
+            }
             currentCilinder = other.gameObject;
             holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;
             rb.useGravity = false;

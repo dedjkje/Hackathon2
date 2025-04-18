@@ -18,6 +18,8 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("Цилиндр")]
     [SerializeField] float cilinderPower;
+    [SerializeField] AudioClip cilinderEnter;
+    private AudioSource source;
     public float gravityForce;
     [HideInInspector] public Vector3 moveVector;
     [HideInInspector] public Vector3 moveDelta;
@@ -32,9 +34,12 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 deltaHolder;
     private GameObject prevCilinder;
     private ChangeGravity changeGravity;
+    private float soundInterval = 2f;
+    private float lastPlayTime = 0f;
 
     void Start()
     {
+        source = GetComponent<AudioSource>();
         changeGravity = transform.Find("Hand").gameObject.GetComponent<ChangeGravity>();
         moveDelta = transform.position;
         previousPosition = transform.position;
@@ -184,6 +189,13 @@ public class FirstPersonController : MonoBehaviour
     {
         if (other.tag == "cilinder")
         {
+            if (Time.time - lastPlayTime >= soundInterval)
+            {
+                source.clip = cilinderEnter;
+                source.Play();
+                lastPlayTime = Time.time;
+                source.clip = cilinderEnter;
+            }
             holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject.transform.position;
             prevCilinder = other.gameObject;
         }
