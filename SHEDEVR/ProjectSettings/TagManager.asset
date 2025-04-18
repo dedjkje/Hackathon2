@@ -14,6 +14,7 @@ TagManager:
   - cilinder
   - button
   - playerTrigger
+  - monster
   layers:
   - Default
   - TransparentFX

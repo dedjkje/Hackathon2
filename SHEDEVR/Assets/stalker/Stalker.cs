@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Xml.Serialization;
 
 public class Stalker : MonoBehaviour
 {
     public Settings settings;
     public ChangeGravity changeGravity;
     public float tempSpeed;
+
+    [Header("Default Wall")]
+    public string defaultWall;
     [Header("Waypoints")]
     public Transform[] waypoints;
 
@@ -61,7 +65,7 @@ public class Stalker : MonoBehaviour
     private Vector3 lastWaypointPosition;
     private Vector3 currentVelocity;
     private Transform localSpaceParent;
-    private string currentWallTag;
+    public string currentWallTag;
     private Transform currentWall;
     private Quaternion targetWallRotation;
     private bool isRotatingToWall = false;
@@ -170,7 +174,7 @@ public class Stalker : MonoBehaviour
         {
             if (hit.collider.transform != currentWall || hit.collider.tag != currentWallTag)
             {
-                currentWallTag = hit.collider.tag;
+                if (hit.collider != null) currentWallTag = hit.collider.tag;
                 currentWall = hit.collider.transform;
                 targetWallRotation = Quaternion.FromToRotation(transform.up, currentWall.up) * transform.rotation;
                 isRotatingToWall = true;
