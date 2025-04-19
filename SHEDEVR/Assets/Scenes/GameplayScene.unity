@@ -2491,6 +2491,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7733455417148745623, guid: 8f7b84a54cd561d4892cd63e3ca8f9ad, type: 3}
+      propertyPath: playerDetectionRadius
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7733455417148745623, guid: 8f7b84a54cd561d4892cd63e3ca8f9ad, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1278737727}
@@ -2942,8 +2946,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallLayers:
     serializedVersion: 2
-    m_Bits: 0
-  checkDistance: 0.5
+    m_Bits: 256
+  checkDistance: 5
   currentWallTag: 
 --- !u!4 &896813988 stripped
 Transform:
@@ -3510,6 +3514,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111258548}
   m_CullTransparentMesh: 1
+--- !u!1001 &1132908275
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1521130658660363082, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_Name
+      value: SaveArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 15.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8099815087192332494, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7ead5e94e6991d842910960526dfe61e, type: 3}
 --- !u!1 &1145410348
 GameObject:
   m_ObjectHideFlags: 0
@@ -7593,6 +7654,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 172193329}
     - target: {fileID: 2842546605301290664, guid: 9ab05a9a54a509847a27137050919d4f, type: 3}
+      propertyPath: hp
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842546605301290664, guid: 9ab05a9a54a509847a27137050919d4f, type: 3}
       propertyPath: fall
       value: 
       objectReference: {fileID: 8300000, guid: 3773040f915e32841803adba03d18705, type: 3}
@@ -7608,6 +7673,10 @@ PrefabInstance:
       propertyPath: cilinderEnter
       value: 
       objectReference: {fileID: 8300000, guid: 7cba6cce53fcfb5428ecac31b9e11c88, type: 3}
+    - target: {fileID: 3013761770581098653, guid: 9ab05a9a54a509847a27137050919d4f, type: 3}
+      propertyPath: joystick
+      value: 
+      objectReference: {fileID: 254300869}
     - target: {fileID: 3013761770581098653, guid: 9ab05a9a54a509847a27137050919d4f, type: 3}
       propertyPath: 'defaultUI.Array.data[0]'
       value: 
@@ -7820,3 +7889,4 @@ SceneRoots:
   - {fileID: 355057782}
   - {fileID: 8163674765417568396}
   - {fileID: 270655325}
+  - {fileID: 1132908275}

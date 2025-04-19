@@ -98,7 +98,6 @@ public class Stalker : MonoBehaviour
     void Update()
     {
         if (waypoints.Length == 0 || isDead) return;
-
         UpdateCurrentWall();
         HandleWallMovement();
         StabilizePosition();
@@ -225,7 +224,8 @@ public class Stalker : MonoBehaviour
         PlayerWallDetector playerWallDetector = player.GetComponent<PlayerWallDetector>();
         if (playerWallDetector != null)
         {
-            return playerWallDetector.CurrentWallTag == currentWallTag;
+
+            return playerWallDetector.CurrentWallTag == defaultWall;
         }
 
         RaycastHit playerHit;

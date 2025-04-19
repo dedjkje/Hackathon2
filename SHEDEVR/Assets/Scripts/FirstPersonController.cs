@@ -47,6 +47,7 @@ public class FirstPersonController : MonoBehaviour
     private CastPull pull;
     [SerializeField] AudioClip fall;
     public bool isDead = false;
+    public bool changing = false;
 
     void Start()
     {
@@ -67,7 +68,12 @@ public class FirstPersonController : MonoBehaviour
     {
         if (characterController != null && !isDead)
         {
-            MovePlayer();
+            if (!abilities.changingNORMAL)
+            {
+
+                MovePlayer();
+
+            }
             GamingGravity();
             AddGravity();
 
@@ -83,6 +89,11 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
+        if(hp <= 0)
+        {
+            Death();    
+        }
+        changing = abilities.changingNORMAL;
         if (characterController != null && !isDead)
         {
             GetTouchInput();
@@ -162,8 +173,11 @@ public class FirstPersonController : MonoBehaviour
     private void MovePlayer()
     {
         moveVector = Vector2.zero;
-        moveVector.x = joystick.Horizontal;
-        moveVector.z = joystick.Vertical;
+        if (joystick.background.gameObject.activeSelf)
+        {
+            moveVector.x = joystick.Horizontal;
+            moveVector.z = joystick.Vertical;
+        }
         moveVector.y = gravityForce;
 
         moveVector = transform.right * moveVector.x + transform.forward * moveVector.z + transform.up * moveVector.y + deltaHolder / (cilinderPower * 2);
@@ -222,27 +236,7 @@ public class FirstPersonController : MonoBehaviour
         }
         if (other.tag == "death")
         {
-            canvas.enabled = false;
-            if (ccollider == null && rb == null)
-            {
-                ccollider = gameObject.AddComponent<CapsuleCollider>();
-                rb = gameObject.AddComponent<Rigidbody>();
-            }
-            Transform hand = transform.Find("Hand");
-            hand.gameObject.GetComponent<Abilities>().enabled = false;
-            hand.gameObject.GetComponent<ChangeGravity>().enabled = false;
-            hand.gameObject.GetComponent<up>().enabled = false;
-            canRotateCamera = false;
-            Destroy(addGravity.cilinder);
-            musicController.TemporaryMute(10f);
-            abilities.currentAbility = Abilities.Ability.PullObject;
-            Destroy(addGravity.Predict);
-            pull.enabled = false;
-            abilities.enabled = false;
-            isDead = true;
-            //source.clip = fall;
-            //source.Play();
-            // reload
+            Death();
         }
     }
     private void OnTriggerExit(Collider other)
@@ -263,5 +257,29 @@ public class FirstPersonController : MonoBehaviour
                 source.Play();
             }
         }
+    }
+    private void Death()
+    {
+        canvas.enabled = false;
+        if (ccollider == null && rb == null)
+        {
+            ccollider = gameObject.AddComponent<BoxCollider>();
+            rb = gameObject.AddComponent<Rigidbody>();
+        }
+        Transform hand = transform.Find("Hand");
+        hand.gameObject.GetComponent<Abilities>().enabled = false;
+        hand.gameObject.GetComponent<ChangeGravity>().enabled = false;
+        hand.gameObject.GetComponent<up>().enabled = false;
+        canRotateCamera = false;
+        Destroy(addGravity.cilinder);
+        musicController.TemporaryMute(10f);
+        abilities.currentAbility = Abilities.Ability.PullObject;
+        Destroy(addGravity.Predict);
+        pull.enabled = false;
+        abilities.enabled = false;
+        isDead = true;
+        //source.clip = fall;
+        //source.Play();
+        // reload
     }
 }

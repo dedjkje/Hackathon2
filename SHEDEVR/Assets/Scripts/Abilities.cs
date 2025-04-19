@@ -10,6 +10,8 @@ public class Abilities : MonoBehaviour
     public GameObject[] defaultUI;
     public GameObject[] decals;
     public bool changing = false;
+    public bool changingNORMAL = false;
+    [SerializeField] Joystick joystick;
 
     private int preChange;
 
@@ -114,6 +116,9 @@ public class Abilities : MonoBehaviour
     }
     public void changeAbility()
     {
+        joystick.ResetJoystick();
+        changingNORMAL = true;
+        joystick.enabled = false;
         DeleteCast();
         hand.SetBool("change", true);
         foreach (GameObject i in abilitiesUI) i.SetActive(true);
@@ -144,6 +149,9 @@ public class Abilities : MonoBehaviour
 
     public void apply()
     {
+        (joystick as FloatingJoystick).ResetFloatingJoystick();
+        joystick.enabled = true;
+        changingNORMAL = false;
         hand.SetBool("change", false);
         foreach (GameObject i in abilitiesUI) i.SetActive(false);
         foreach (GameObject i in defaultUI) i.SetActive(true);

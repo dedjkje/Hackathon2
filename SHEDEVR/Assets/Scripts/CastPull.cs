@@ -61,7 +61,9 @@ public class CastPull : MonoBehaviour
                 target.z - rb.transform.position.z);
             
             rb.linearVelocity = distance / time;
-            if ((Vector3.Distance(target, rb.transform.position) < 2)|| rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision || (Time.time - timer > 3f))
+            Vector3 targetXZ = new Vector3(target.x, 0, target.z);
+            Vector3 rbXZ = new Vector3(rb.transform.position.x, 0, rb.transform.position.z);
+            if ((Vector3.Distance(targetXZ, rbXZ) < 2)|| rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision || (Time.time - timer > 3f))
             { 
                 stopAnimation = true;
                 PullEnded = true;
