@@ -35,7 +35,7 @@ public class Steps : MonoBehaviour
     {
         timeFromLastStep += Time.deltaTime * currentDelta.magnitude;
 
-        if (timeFromLastStep > interval && player.isGrounded)
+        if (timeFromLastStep > interval && player.isGrounded && !player.isDead)
         {
             source.resource = steps[nextStep];
             source.Play();

@@ -5,7 +5,7 @@ public class up : MonoBehaviour
     [SerializeField] public GameObject Parent;
     [SerializeField] public GameObject Predict;
     [SerializeField] public GameObject Cilinder;
-    private GameObject cilinder;
+    public GameObject cilinder;
     [SerializeField] Camera playerCamera;
     public bool canCast;
     public bool popal;

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
 {
+    [SerializeField] Canvas canvas;
+
     [Header("Параметры персонажа")]
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpPower;
@@ -23,7 +25,7 @@ public class FirstPersonController : MonoBehaviour
     public float gravityForce;
     [HideInInspector] public Vector3 moveVector;
     [HideInInspector] public Vector3 moveDelta;
-    [HideInInspector] public bool isGrounded;
+    public bool isGrounded;
     private CharacterController characterController;
     private int rightFingerId;
     private float halfScreenWidth;
@@ -36,11 +38,24 @@ public class FirstPersonController : MonoBehaviour
     private ChangeGravity changeGravity;
     private float soundInterval = 2f;
     private float lastPlayTime = 0f;
+    private Collider ccollider;
+    private Rigidbody rb;
+    private bool canRotateCamera = true;
+    private MusicController musicController;
+    private up addGravity;
+    private Abilities abilities;
+    private CastPull pull;
+    [SerializeField] AudioClip fall;
+    public bool isDead = false;
 
     void Start()
     {
+        musicController = transform.Find("Music").gameObject.GetComponent<MusicController>();
         source = GetComponent<AudioSource>();
         changeGravity = transform.Find("Hand").gameObject.GetComponent<ChangeGravity>();
+        pull = transform.Find("Hand").gameObject.GetComponent<CastPull>();
+        abilities = transform.Find("Hand").gameObject.GetComponent<Abilities>();
+        addGravity = transform.Find("Hand").gameObject.GetComponent<up>();
         moveDelta = transform.position;
         previousPosition = transform.position;
         characterController = GetComponent<CharacterController>();
@@ -50,31 +65,37 @@ public class FirstPersonController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MovePlayer();
-        GamingGravity();
-        AddGravity();
-
-        if (rightFingerId != -1)
+        if (characterController != null && !isDead)
         {
-            LookAround();
-        }
+            MovePlayer();
+            GamingGravity();
+            AddGravity();
 
-        moveDelta = transform.position - previousPosition;
-        previousPosition = transform.position;
+            if (rightFingerId != -1 && canRotateCamera)
+            {
+                LookAround();
+            }
+
+            moveDelta = transform.position - previousPosition;
+            previousPosition = transform.position;
+        }
     }
 
     void Update()
     {
-        GetTouchInput();
-        isGrounded = characterController.isGrounded;
-        if (prevCilinder == null)
+        if (characterController != null && !isDead)
         {
-            holder = Vector3.zero;
-            deltaHolder = Vector3.zero;
-        }
-        if (changeGravity.isRotating && prevCilinder != null && holder != Vector3.zero)
-        {
-            // хз пока как это пофиксить
+            GetTouchInput();
+            isGrounded = characterController.isGrounded;
+            if (prevCilinder == null)
+            {
+                holder = Vector3.zero;
+                deltaHolder = Vector3.zero;
+            }
+            if (changeGravity.isRotating && prevCilinder != null && holder != Vector3.zero)
+            {
+                // potom
+            }
         }
     }
 
@@ -199,6 +220,30 @@ public class FirstPersonController : MonoBehaviour
             holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject.transform.position;
             prevCilinder = other.gameObject;
         }
+        if (other.tag == "death")
+        {
+            canvas.enabled = false;
+            if (ccollider == null && rb == null)
+            {
+                ccollider = gameObject.AddComponent<CapsuleCollider>();
+                rb = gameObject.AddComponent<Rigidbody>();
+            }
+            Transform hand = transform.Find("Hand");
+            hand.gameObject.GetComponent<Abilities>().enabled = false;
+            hand.gameObject.GetComponent<ChangeGravity>().enabled = false;
+            hand.gameObject.GetComponent<up>().enabled = false;
+            canRotateCamera = false;
+            Destroy(addGravity.cilinder);
+            musicController.TemporaryMute(10f);
+            abilities.currentAbility = Abilities.Ability.PullObject;
+            Destroy(addGravity.Predict);
+            pull.enabled = false;
+            abilities.enabled = false;
+            isDead = true;
+            //source.clip = fall;
+            //source.Play();
+            // reload
+        }
     }
     private void OnTriggerExit(Collider other)
     {
@@ -206,6 +251,17 @@ public class FirstPersonController : MonoBehaviour
         {
             holder = Vector3.zero;
             deltaHolder = Vector3.zero;
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (ccollider != null)
+        {
+            if (collision.gameObject.layer == 8)
+            {
+                source.clip = fall;
+                source.Play();
+            }
         }
     }
 }

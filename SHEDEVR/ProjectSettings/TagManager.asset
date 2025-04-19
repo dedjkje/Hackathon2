@@ -15,6 +15,7 @@ TagManager:
   - button
   - playerTrigger
   - monster
+  - death
   layers:
   - Default
   - TransparentFX
