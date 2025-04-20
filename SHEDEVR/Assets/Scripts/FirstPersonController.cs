@@ -1,6 +1,4 @@
-using System.Security.Cryptography;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class FirstPersonController : MonoBehaviour
 {
