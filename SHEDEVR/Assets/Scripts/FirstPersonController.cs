@@ -189,9 +189,9 @@ public class FirstPersonController : MonoBehaviour
     {
         if (changeGravity.isRotating && holder == Vector3.zero)
         {
-            if (transform.position.y < 10f)
+            if (transform.position.y < 0f)
             {
-                gravityForce = 4f;
+                gravityForce = 2f;
             }
             else
             {
