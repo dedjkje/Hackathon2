@@ -20,9 +20,11 @@ public class UpMonster : MonoBehaviour
     [SerializeField] AudioClip cilinderEnter;
     private float soundInterval = 2f;
     private float lastPlayTime = 0;
+    private Animator animator;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
         stalker = GetComponent<Stalker>();
         rb = GetComponent<Rigidbody>();
@@ -77,6 +79,7 @@ public class UpMonster : MonoBehaviour
             holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;
             rb.useGravity = false;
             rb.isKinematic = false;
+            animator.speed = 0.2f;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -92,6 +95,7 @@ public class UpMonster : MonoBehaviour
     {
         if (collision.gameObject.layer == 8)
         { // Walls
+            animator.speed = 1f;
             rb.isKinematic = true;
             rb.useGravity = false;
             if (stalker.defaultWall != collision.gameObject.tag)
@@ -102,6 +106,7 @@ public class UpMonster : MonoBehaviour
                 stalker.Dead.SetActive(true);
                 stalker.audioSource.PlayOneShot(stalker.deathAudio, stalker.settings.volume);
                 stalker.isDead = true;
+                stalker.Death();
             }
             else
             {

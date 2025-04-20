@@ -68,12 +68,9 @@ public class FirstPersonController : MonoBehaviour
     {
         if (characterController != null && !isDead)
         {
-            if (!abilities.changingNORMAL)
-            {
+            
+            MovePlayer();
 
-                MovePlayer();
-
-            }
             GamingGravity();
             AddGravity();
 

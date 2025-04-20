@@ -7,13 +7,11 @@ public class DoorScript : MonoBehaviour
     [SerializeField] Transform DoorUp;
     [SerializeField] Transform DoorDown;
     [SerializeField] float openSpeed;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (button.isPressed)

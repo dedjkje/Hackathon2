@@ -75,6 +75,7 @@ public class Stalker : MonoBehaviour
 
     void Start()
     {
+
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerController = player.GetComponent<FirstPersonController>();
@@ -475,7 +476,29 @@ public class Stalker : MonoBehaviour
                 Dead.SetActive(true);
                 audioSource.PlayOneShot(deathAudio, settings.volume);
                 isDead = true;
+                Death();
             }
         }
+    }
+    public void Death()
+    {
+        changeGravity.musicController.TemporaryMute(2);
+        transform.Find("wolk").gameObject.SetActive(true);
+        foreach (Transform t in transform.Find("wolk"))
+        {
+            BoxCollider c = t.gameObject.AddComponent<BoxCollider>();
+            t.gameObject.AddComponent<Rigidbody>();
+            StartCoroutine(destroyPart(t, Random.Range(2f, 3f)));
+        }
+        transform.Find("wolk").parent = null;
+        foreach (Transform t in transform)
+        {
+            if (t.gameObject.name != "deathSource") t.gameObject.SetActive(false);
+        }
+    }
+    private IEnumerator destroyPart(Transform o, float t)
+    {
+        yield return new WaitForSeconds(t);
+        Destroy(o.gameObject);
     }
 }
