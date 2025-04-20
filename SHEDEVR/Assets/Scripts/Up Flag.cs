@@ -57,9 +57,9 @@ public class UpFlag : MonoBehaviour
         if (holder != null)
         {
             distance = new Vector3(
-                holder.transform.position.x / 1.2f - transform.position.x,
-                holder.transform.position.y / 1.2f - transform.position.y,
-                holder.transform.position.z / 1.2f - transform.position.z);
+                holder.transform.position.x - transform.position.x,
+                holder.transform.position.y - transform.position.y,
+                holder.transform.position.z - transform.position.z);
             rb.linearVelocity = distance;
         }
         else

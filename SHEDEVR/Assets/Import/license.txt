@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sci-fi Doors
+* source:	https://sketchfab.com/3d-models/sci-fi-doors-8acd23b6853949a99d007bfc162544c0
+* author:	Konstantin Lavrenov (https://sketchfab.com/arttopperfx)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sci-fi Doors" (https://sketchfab.com/3d-models/sci-fi-doors-8acd23b6853949a99d007bfc162544c0) by Konstantin Lavrenov (https://sketchfab.com/arttopperfx) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
