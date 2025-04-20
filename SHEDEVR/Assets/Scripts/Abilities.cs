@@ -122,7 +122,11 @@ public class Abilities : MonoBehaviour
             }
         }
     }
+    private void LateUpdate()
+    {
 
+        if (currentAbility == Ability.ChangeGravity && changingNORMAL) defaultUI[0].SetActive(false);
+    }
     public void nextAbility()
     {
         currentAbility = (Ability)((int)(currentAbility + 1) % 3);

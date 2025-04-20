@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class DoorScript1 : MonoBehaviour
 {
@@ -8,9 +9,12 @@ public class DoorScript1 : MonoBehaviour
     [SerializeField] Transform DoorUp;
     [SerializeField] Transform DoorDown;
     [SerializeField] float openSpeed;
+    private bool movementBegan = false;
+    private bool lastWasOpenning = false;
+    private AudioSource source;
     void Start()
     {
-        
+        source = GetComponent<AudioSource>();
     }
     
     void Update()
@@ -19,16 +23,39 @@ public class DoorScript1 : MonoBehaviour
         {
             if (button1.isPressed && button2.isPressed)
             {
-                transform.position = Vector3.MoveTowards(transform.position, DoorUp.position, openSpeed * Time.deltaTime);
+                if (!lastWasOpenning)
+                {
+                    movementBegan = true;
+                    lastWasOpenning = true;
+                }
+                transform.position = Vector3.MoveTowards(transform.position, DoorUp.position, openSpeed * Time.deltaTime * 1.5f);
             }
             if (!button1.isPressed || !button2.isPressed)
             {
-                transform.position = Vector3.MoveTowards(transform.position, DoorDown.position, openSpeed * Time.deltaTime);
+                if (lastWasOpenning)
+                {
+                    movementBegan = true;
+                    lastWasOpenning = false;
+                }
+                transform.position = Vector3.MoveTowards(transform.position, DoorDown.position, openSpeed * Time.deltaTime* 1.5f);
             }
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, DoorDown.position, openSpeed * Time.deltaTime);
+            if (lastWasOpenning)
+            {
+                movementBegan = true;
+                lastWasOpenning = false;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, DoorDown.position, openSpeed * Time.deltaTime * 1.5f);
+        }
+    }
+    public void playSound()
+    {
+        if (source != null)
+        {
+            source.Play();
+            movementBegan = false;
         }
     }
     public void Transaction()

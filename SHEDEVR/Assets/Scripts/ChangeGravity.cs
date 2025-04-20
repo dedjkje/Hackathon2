@@ -149,7 +149,7 @@ public class ChangeGravity : MonoBehaviour
                         !abilities.changing &&
                         rotationRules.Exists(r => r.currentWall == currentWall && r.targetWall == hitWall);
             
-            foreach (GameObject go in hideUI) go.SetActive(showUI);
+            //foreach (GameObject go in hideUI) go.SetActive(showUI);
         }
     }
     void Update()

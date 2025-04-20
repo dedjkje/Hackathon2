@@ -24,7 +24,8 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(1);
+        AbilityMember.ability = FindAnyObjectByType<Abilities>().currentAbility;
+        SceneManager.LoadScene(2);
     }
     IEnumerator destroyLocation(GameObject location)
     {

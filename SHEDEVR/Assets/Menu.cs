@@ -4,11 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    private string savePath;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        savePath = Path.Combine(Application.persistentDataPath, "playerSave.txt");
+        
     }
 
     // Update is called once per frame
@@ -19,8 +18,7 @@ public class Menu : MonoBehaviour
 
     public void onStartNewGame()
     {
-        File.WriteAllText(savePath, "//////");
-        SceneManager.LoadScene("Gameplay Scene");
+        SceneManager.LoadScene(1);
 
     }
     public void onContinueGame()

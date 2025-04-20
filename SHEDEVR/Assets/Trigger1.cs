@@ -7,6 +7,7 @@ public class Trigger1 : MonoBehaviour
     [SerializeField] DoorScript[] doorsBack;
     [SerializeField] DoorScript[] doorsNext;
     [SerializeField] GameObject location;
+    [SerializeField] GameObject newLocation;
     [SerializeField] GameObject save;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,7 +34,7 @@ public class Trigger1 : MonoBehaviour
         if (location != null)
         {
             yield return new WaitForSeconds(2f);
-            save.transform.parent = null;
+            save.transform.parent = newLocation.transform;
             foreach (Transform t in location.transform)
             {
                 if (t.gameObject.layer != 10) Destroy(t.gameObject);
