@@ -263,7 +263,7 @@ public class FirstPersonController : MonoBehaviour
         canvas.enabled = false;
         if (ccollider == null && rb == null)
         {
-            ccollider = gameObject.AddComponent<BoxCollider>();
+            ccollider = gameObject.AddComponent<CapsuleCollider>();
             rb = gameObject.AddComponent<Rigidbody>();
         }
         Transform hand = transform.Find("Hand");
