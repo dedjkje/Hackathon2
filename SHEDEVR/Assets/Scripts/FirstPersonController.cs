@@ -4,7 +4,7 @@ using UnityEngine;
 public class FirstPersonController : MonoBehaviour
 {
     [SerializeField] Canvas canvas;
-
+    [SerializeField] LayerMask wallsLayer;
     [Header("Параметры персонажа")]
     [SerializeField] float moveSpeed;
     [SerializeField] float jumpPower;
@@ -86,7 +86,13 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
-        if(hp <= 0)
+        Collider[] wall = Physics.OverlapSphere(transform.position, 1f, wallsLayer);
+        foreach (Collider col in wall)
+        {
+            Physics.IgnoreCollision(characterController, col, true);
+        }
+
+        if (hp <= 0)
         {
             Death();    
         }

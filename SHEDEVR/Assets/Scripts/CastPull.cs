@@ -2,6 +2,7 @@ using Mono.Cecil;
 using System.Diagnostics.Contracts;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class CastPull : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class CastPull : MonoBehaviour
 
     [Header("Сквозь что проходит луч")]
     [SerializeField] LayerMask layerMask;
+    private bool stop = false;
 
     [HideInInspector] public GameObject pullable;
     private bool canMove = false;
@@ -63,7 +65,7 @@ public class CastPull : MonoBehaviour
             rb.linearVelocity = distance / time;
             Vector3 targetXZ = new Vector3(target.x, 0, target.z);
             Vector3 rbXZ = new Vector3(rb.transform.position.x, 0, rb.transform.position.z);
-            if ((Vector3.Distance(targetXZ, rbXZ) < 2)|| rb.linearVelocity.magnitude < 0.1f || rb.gameObject.GetComponent<PullableFlag>().playerCollision || (Time.time - timer > 3f))
+            if ((Vector3.Distance(targetXZ, rbXZ) < 2) || (rb.linearVelocity.magnitude < 0.1f && rb.gameObject.GetComponent<UpFlag>().holder == null) || rb.gameObject.GetComponent<PullableFlag>().playerCollision || (Time.time - timer > 3f) || rb.gameObject.GetComponent<PullableFlag>().stop)
             { 
                 stopAnimation = true;
                 PullEnded = true;
@@ -71,6 +73,7 @@ public class CastPull : MonoBehaviour
                 rb.gameObject.GetComponent<Outline>().OutlineWidth = 0f;
                 rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
                 rb.constraints = RigidbodyConstraints.None;
+                rb.gameObject.GetComponent<PullableFlag>().stop = false;
                 rb = null;
                 canMove = false;
             }

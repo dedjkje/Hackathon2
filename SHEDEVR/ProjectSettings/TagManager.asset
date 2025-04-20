@@ -17,6 +17,7 @@ TagManager:
   - monster
   - death
   - door
+  - spike
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Walls
   - NotUp
   - Door
-  - 
+  - IgnoreWall
   - 
   - 
   - 

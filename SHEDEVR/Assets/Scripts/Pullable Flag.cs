@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PullableFlag : MonoBehaviour
 {
     [HideInInspector] public bool playerCollision;
     private Rigidbody rb;
+    public bool stop;
 
     void Start()
     {
@@ -21,6 +23,11 @@ public class PullableFlag : MonoBehaviour
         if (collision.gameObject.GetComponent<CharacterController>())
         {
             playerCollision = true;
+        }
+        if (collision.gameObject.tag == "spike")
+        {
+                Debug.Log("wewewe");
+                stop = true;
         }
     }
     private void OnCollisionStay(Collision collision)
