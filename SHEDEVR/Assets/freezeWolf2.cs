@@ -10,6 +10,6 @@ public class freezeWolf2 : MonoBehaviour
     
     void Update()
     {
-        transform.rotation = Quaternion.Euler(-90f, 0f, transform.rotation.eulerAngles.z);
+        transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
     }
 }

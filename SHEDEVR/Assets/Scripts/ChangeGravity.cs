@@ -19,6 +19,7 @@ public class ChangeGravity : MonoBehaviour
     public float soundDuration = 3f; // ����� ������������ �����
     public float fadeOutDuration = 0.5f; // ������������ ���������
     public bool showUI;
+    public GameObject currentWallGO;
     [SerializeField] Camera playerCamera;
     [SerializeField] GameObject[] hideUI;
     [SerializeField] public Transform rotate;
@@ -234,7 +235,11 @@ public class ChangeGravity : MonoBehaviour
     string GetWallTag()
     {
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        return Physics.Raycast(ray, out RaycastHit hit, 100f, wallLayer) ? hit.transform.tag : "null";
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, wallLayer))
+        {
+            currentWallGO = hit.transform.gameObject;
+        }
+        return Physics.Raycast(ray, out RaycastHit hhit, 100f, wallLayer) ? hhit.transform.tag : "null";
     }
 
     public void Change()
@@ -284,8 +289,8 @@ public class ChangeGravity : MonoBehaviour
         StartCoroutine(GravityEffectRoutine());
         StartShake();
         StartCoroutine(PlaySoundWithFade());
-        musicController.TemporaryMute(3);
-        yield return new WaitForSeconds(0.5f);
+        musicController.TemporaryMute(3.5f);
+        yield return new WaitForSeconds(1f);
         float elapsed = 0f;
         foreach (GameObject go in upableObjects)
         {
@@ -369,7 +374,7 @@ public class ChangeGravity : MonoBehaviour
                     Vector3 currentPos = upableObjects[i].transform.position;
                     Vector3 newPos = new Vector3(
                         originalXZ[i].x,
-                        Mathf.Lerp(currentPos.y, targetHeight, liftSpeed * Time.deltaTime),
+                        Mathf.Lerp(currentPos.y, upableObjects[i].GetComponent<TargetH>().GetTargetY(), liftSpeed * Time.deltaTime),
                         originalXZ[i].z
                     );
 

@@ -471,9 +471,9 @@ public class Stalker : MonoBehaviour
             if (!isDead)
             {
                 enabled = false;
-                Alive.SetActive(false);
-                Dead.transform.parent = null;
-                Dead.SetActive(true);
+                //Alive.SetActive(false);
+                //Dead.transform.parent = null;
+                //Dead.SetActive(true);
                 audioSource.PlayOneShot(deathAudio, settings.volume);
                 isDead = true;
                 Death();

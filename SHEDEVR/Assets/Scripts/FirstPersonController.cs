@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class FirstPersonController : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] float jumpPower;
     [SerializeField] float gravityPower;
     [SerializeField] public float hp;
-
+    GameObject emptyChild;
+    bool doLetel = false;
     [Header("Джойстик")]
     [SerializeField] Joystick joystick;
 
@@ -111,6 +113,11 @@ public class FirstPersonController : MonoBehaviour
                 // potom
             }
         }
+        if (!changeGravity.isRotating)
+        {
+            if (emptyChild != null) Destroy(emptyChild);
+            doLetel = false;
+        }
     }
 
     private void AddGravity()
@@ -192,13 +199,27 @@ public class FirstPersonController : MonoBehaviour
     {
         if (changeGravity.isRotating && holder == Vector3.zero)
         {
-            if (transform.position.y < 0f)
+            if (transform.position.y < GetComponent<TargetH>().GetTargetY() && !doLetel)
             {
-                gravityForce = 2f;
+                gravityForce = 4f;
             }
             else
             {
+                doLetel = true;
                 gravityForce = 0f;
+                if (!GameObject.FindGameObjectWithTag("Empty"))
+                {
+                    emptyChild = new GameObject("EmptyChild");
+                    emptyChild.transform.position = transform.position;
+                    emptyChild.tag = "Empty";
+                    GameObject wall = changeGravity.currentWallGO;
+                    emptyChild.transform.SetParent(wall.transform);
+                }
+                else
+                {
+                    emptyChild = GameObject.FindGameObjectWithTag("Empty");
+                    transform.position = emptyChild.transform.position;
+                }
             }
         }
         else if (changeGravity.isRotating && holder != Vector3.zero)

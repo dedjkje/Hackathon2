@@ -18,6 +18,7 @@ TagManager:
   - death
   - door
   - spike
+  - Empty
   layers:
   - Default
   - TransparentFX
