@@ -466,7 +466,7 @@ public class Stalker : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<CanKillStalker>() && collision.rigidbody.linearVelocity.magnitude > 0.8f)
+        if (collision.gameObject.GetComponent<CanKillStalker>() && collision.rigidbody.linearVelocity.magnitude > 0.8f && collision.gameObject.tag != "Player")
         {
             if (!isDead)
             {

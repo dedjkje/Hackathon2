@@ -69,14 +69,17 @@ public class UpMonster : MonoBehaviour
         {
             if (Time.time - lastPlayTime >= soundInterval)
             {
-                source.clip = cilinderEnter;
-                source.Play();
-                lastPlayTime = Time.time;
-                source.clip = cilinderEnter;
+                if (!changeGravity.isRotating)
+                {
+                    source.clip = cilinderEnter;
+                    source.Play();
+                    lastPlayTime = Time.time;
+                    source.clip = cilinderEnter;
+                }
             }
             stalker.enabled = false;
             currentCilinder = other.gameObject;
-            holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;
+            holder = other.gameObject.transform.parent.transform.Find("Holder Extra").gameObject;
             rb.useGravity = false;
             rb.isKinematic = false;
             animator.speed = 0.2f;
@@ -100,10 +103,10 @@ public class UpMonster : MonoBehaviour
             rb.useGravity = false;
             if (stalker.defaultWall != collision.gameObject.tag)
             {
-                stalker.enabled = false;
-                stalker.Alive.SetActive(false);
-                stalker.Dead.transform.parent = null;
-                stalker.Dead.SetActive(true);
+                //stalker.enabled = false;
+                //stalker.Alive.SetActive(false);
+                //stalker.Dead.transform.parent = null;
+                //stalker.Dead.SetActive(true);
                 stalker.audioSource.PlayOneShot(stalker.deathAudio, stalker.settings.volume);
                 stalker.isDead = true;
                 stalker.Death();

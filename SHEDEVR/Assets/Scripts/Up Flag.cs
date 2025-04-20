@@ -102,10 +102,13 @@ public class UpFlag : MonoBehaviour
         {
             if (Time.time - lastPlayTime >= soundInterval)
             {
-                source.clip = cilinderEnter;
-                source.Play();
-                lastPlayTime = Time.time;
-                source.clip = cilinderEnter;
+                if (!changeGravity.isRotating)
+                {
+                    source.clip = cilinderEnter;
+                    source.Play();
+                    lastPlayTime = Time.time;
+                    source.clip = cilinderEnter;
+                }
             }
             currentCilinder = other.gameObject;
             holder = other.gameObject.transform.parent.transform.Find("Holder").gameObject;
