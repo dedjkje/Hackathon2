@@ -14,13 +14,30 @@ public class DoorScript : MonoBehaviour
     
     void Update()
     {
-        if (button.isPressed)
+        if (button != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, DoorUp.position, openSpeed * Time.deltaTime);
+            if (button.isPressed)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, DoorUp.position, openSpeed * Time.deltaTime);
+            }
+            if (!button.isPressed)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, DoorDown.position, openSpeed * Time.deltaTime);
+            }
         }
-        if (!button.isPressed)
+        else
         {
             transform.position = Vector3.MoveTowards(transform.position, DoorDown.position, openSpeed * Time.deltaTime);
         }
+    }
+    public void Transaction()
+    {
+        button = null;
+    }
+    public void BrainSwap()
+    {
+        Transform temp = DoorDown;
+        DoorDown = DoorUp;
+        DoorUp = temp;
     }
 }

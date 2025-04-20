@@ -60,6 +60,7 @@ public class Save : MonoBehaviour
         // Конвертируем в JSON
         string jsonData = JsonUtility.ToJson(data);
 
+        // LoadPlayerData(fps.transform);
         try
         {
             // Записываем в файл (создастся автоматически, если не существует)

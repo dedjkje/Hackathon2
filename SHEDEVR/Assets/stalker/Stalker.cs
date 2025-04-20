@@ -498,6 +498,10 @@ public class Stalker : MonoBehaviour
     }
     private IEnumerator destroyPart(Transform o, float t)
     {
+        if (GetComponent<BoxCollider>())
+        {
+            GetComponent<BoxCollider>().enabled = false;
+        }
         yield return new WaitForSeconds(t);
         Destroy(o.gameObject);
     }

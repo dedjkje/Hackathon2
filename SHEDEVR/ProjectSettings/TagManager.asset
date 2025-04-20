@@ -16,6 +16,7 @@ TagManager:
   - playerTrigger
   - monster
   - death
+  - door
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Obstacle
   - Walls
   - NotUp
-  - 
+  - Door
   - 
   - 
   - 
