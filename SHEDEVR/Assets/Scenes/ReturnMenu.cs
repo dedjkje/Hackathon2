@@ -7,7 +7,7 @@ public class ReturnMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        back();
+        StartCoroutine(back());
     }
 
     // Update is called once per frame
